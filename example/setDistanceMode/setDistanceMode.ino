@@ -34,13 +34,14 @@ void setup(void)
 
 void loop() 
 {
-  //sensor.startRanging();
   int distance = sensor.getDistance();
-  //sensor.stopRanging();
-
-  Serial.print("Distance(mm): ");
-  Serial.println(distance);
-
+  // Serial.print("Distance(mm): ");
+  // Serial.println(distance);
   Serial.println();
+  delay(1000);
+}
+
+void interrupt(){
+  Serial.println("distance is below 200mm");
   delay(1000);
 }
