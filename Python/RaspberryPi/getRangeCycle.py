@@ -30,7 +30,8 @@ print("TimingBudget      : %.1f " % sensor.getTimingBudgetInMs())
 
 def main():
     while True:
-        time.sleep(1)
+        print ("Distance   : %.2f " % sensor.getDistance())
+        print (" ")
 
 if __name__ == "__main__":
     main()
