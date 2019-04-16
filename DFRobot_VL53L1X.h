@@ -78,6 +78,7 @@ class DFRobot_VL53L1X
         void stopRanging();
         void setTimingBudgetInMs(uint16_t timingBudget);
         uint16_t getTimingBudgetInMs();
+        bool checkForDataReady();
         void setDistanceModeLong();
         void setDistanceModeShort();
         void setDistanceMode(uint16_t DM);
@@ -86,6 +87,7 @@ class DFRobot_VL53L1X
         uint16_t getInterMeasurementInMs();
         uint16_t getDistance(); 
         uint8_t getRangeStatus(); 
+        //uint16_t checkInterrupt();
         void setOffset(int16_t OffsetValue);
         int16_t getOffset();
         void setXTalk(uint16_t XtalkValue);
@@ -105,7 +107,7 @@ class DFRobot_VL53L1X
         TwoWire *_pWire;
         void sensorOn();
         void sensorOff();
-        bool checkForDataReady();
+        
         uint16_t getSignalPerSpad();
         uint16_t getAmbientPerSpad();
         uint16_t getSignalRate(); 

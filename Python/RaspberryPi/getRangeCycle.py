@@ -18,13 +18,13 @@ sensor = VL53L1X(1) #VL53L1X begin
 sensor.setDistanceModeLong()
 '''
 The timing budget (TB) is the time required for the device to make one distance measurement
-TimingBudgetInMs = 15,20,33,50,100,200,500 ms
+TimingBudgetInMs = 20,33,50,100,200,500 ms
 '''
 sensor.setTimingBudgetInMs(15)
 '''
 The intermeasurement period  must be greater than or equal to the timing budget
 '''
-sensor.setInterMeasurementInMs(15)
+sensor.setInterMeasurementInMs(50)
 print("InterMeasurement  : %.1f " % sensor.getInterMeasurementInMs())
 print("TimingBudget      : %.1f " % sensor.getTimingBudgetInMs())
 

@@ -44,51 +44,217 @@ $> python VL53L1X.py
 
 ```Python
 
-'''
-@brief vl53l1x begin 
-'''
-def __init__(self, bus)
 
 '''
-@brief set                        ModeState and PrecisionState
+@brief To judge which one is being used 
 
-@param ModeState mode             Single or Continuous
-       PrecisionState precision   High or Low
+@return true if VL53L1X init succeed
+@return false if VL53L1X init failed
 '''
-def setMode(ModeState mode, PrecisionState precision)
-
+def begin(self)
+ 
 '''
-@brief
-
-@return The ambient count
+@brief Set the I2C address
 '''
-def getAmbientCount()
-'''
-@brief  Gets the signal count
-
-@return The signal count
-'''
-def getSignalCount()
-'''
-@brief  Gets the status
-
-@return The detailed status
-'''
-def getStatus()
+def (self, addr)
 
 '''
-@brief set                 DistanceState mode
+@brief Gets the current I2C address
 
-@param DistanceState mode  shortDistance or mediumDistance or longDistance
+@return The I2C address
 '''
-def setDistanceMode(DistanceState mode);
+def getI2CAddress(self)
 
 '''
-@brief  Gets the distansce
+@brief Sets interrupt polarity high
+'''
+def setInterruptPolarityHigh(self)
+
+'''
+@brief Sets interrupt polarity low
+'''
+
+def setInterruptPolarityLow(self)
+
+'''
+@brief Sets interrupt polarity(1 is high,0 is low)
+'''
+def setInterruptPolarity(self, NewPolarity)
+
+'''
+@brief Gets the interrupt polarity
+
+@return The interrupt polarity(1 is high,0 is low)
+'''
+def getInterruptPolarity(self)
+
+'''
+@brief enable range sensor
+'''
+def startRanging(self)
+
+'''
+@brief disable range sensor
+'''
+def stopRanging(self)
+
+'''
+@brief Set timing budget in ms(15?20?33?50?100?200?500)
+'''
+def setTimingBudgetInMs(self, timingBudget)
+
+'''
+@brief Get timing budget in ms
+
+@return timing budget
+'''
+def getTimingBudgetInMs(self)
+
+'''
+@brief Set long distance mode
+'''
+def setDistanceModeLong(self)
+
+'''
+@brief Set short distance mode
 
 @return The detailed distance
 '''
-def getDistance()
+def setDistanceModeShort(self)
+
+'''
+@brief Set distance mode
+
+@param distance mode(long or short)
+'''
+def setDistanceMode(self, DM);
+
+'''
+@brief Gets the distance mode
+
+@return distance mode(long or short)
+'''
+def getDistanceMode(self)
+
+'''
+@brief Set inter measurement in ms
+
+@param interMeasurement must be greater than or equal to the timing budget
+'''
+def setInterMeasurementInMs(self, interMeasurement)
+
+'''
+@brief Get inter measurement in ms
+
+@return inter measurement
+'''
+def getInterMeasurementInMs(self)
+
+'''
+@brief Gets the distansce
+
+@return The detailed distance
+'''
+def getDistance(self) 
+
+'''
+@brief Set offset calibration
+
+@param The detailed offset value(depends on sensor works)
+'''
+def setOffset(self, OffsetValue);
+
+'''
+@brief Get offset calibration
+
+@return The detailed offset value
+'''
+def getOffset(self)
+
+'''
+@brief Set Xtalk calibration
+
+@param The detailed Xtalk value(depends on sensor works)
+'''
+def setXTalk(self, XtalkValue);
+
+'''
+@brief Get Xtalk calibration
+
+@return The detailed Xtalk value
+'''
+def getXTalk(self);
+
+'''
+@brief Set distance threshold
+
+@param ThreshLow(in mm) is the threshold under which the device raises an interrupt if window = 0
+       ThreshHigh(in mm) is the threshold above which the device raises an interrupt if window = 1
+       IntOnNoTarget is the window detection mode where 0 = below, 1 = above, 2 = out, and 3 = in
+'''
+def setDistanceThreshold(self, ThreshLow, ThreshHigh, Window)
+
+'''
+@brief Gets distance threshold window
+
+@return The threshold window:0 = below, 1 = above, 2 = out, and 3 = in
+'''
+def getDistanceThresholdWindow(self);
+
+'''
+@brief Gets distance threshold low
+
+@return The distance threshold low
+'''
+def getDistanceThresholdLow(self)
+
+'''
+@brief Gets distance threshold high
+
+@return The distance threshold high
+'''
+def getDistanceThresholdHigh(self)
+
+'''
+@brief Set programs the ROI
+
+@param X is the ROI width and Y is the ROI height
+'''
+def setROI(self, X, Y)
+
+'''
+@brief This function programs a new signal threshold in kcps where the default is 1024 kcps
+
+@param Default is 1024 kcps
+'''
+def setSignalThreshold(self, Signal);
+
+'''
+@brief Gets current signal threshold
+
+@return The  current signal threshold in kcps
+'''
+def getSignalThreshold(self)
+
+'''
+@brief Sets calibrate offset
+
+@param The target distance in mm
+'''
+def calibrateOffset(self, targetDistInMm)
+
+'''
+@brief Sets calibrate XTalk
+
+@return The target distance in mm
+'''
+def calibrateXTalk(self, targetDistInMm)
+
+'''
+@brief 1D gesture
+'''
+def gesture(self)
+
 
 ```
 

@@ -159,8 +159,11 @@ class VL53L1X:
         pInterruptPolarity = 0
     
         Temp = self.readByteData(self.GPIO_HV_MUX__CTRL)
+        print(Temp)
         Temp = Temp & 0x10
+        #print(Temp)
         pInterruptPolarity = not(Temp>>4)
+        #print(pInterruptPolarity)
         return pInterruptPolarity
         
     def startRanging(self):
@@ -450,7 +453,7 @@ class VL53L1X:
         Temp = self.readByteData(self.SYSTEM__INTERRUPT_CONFIG_GPIO)
         Temp = Temp & 0x47
     
-        self.writeByteData(self.SYSTEM__INTERRUPT_CONFIG_GPIO, ((Temp | (Window & 0x07)) | 0x40))
+        self.writeByteData(self.SYSTEM__INTERRUPT_CONFIG_GPIO, (Temp | (Window & 0x07)))
         self.writeWordData(self.SYSTEM__THRESH_HIGH, ThreshHigh)
         self.writeWordData(self.SYSTEM__THRESH_LOW, ThreshLow)
 

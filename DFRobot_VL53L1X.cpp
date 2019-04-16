@@ -535,7 +535,6 @@ uint16_t DFRobot_VL53L1X::getXTalk()
     return xtalk;
 }
 
-
 void DFRobot_VL53L1X::setDistanceThreshold(uint16_t ThreshLow, uint16_t ThreshHigh, uint8_t Window)
 {
     uint8_t Temp = 0;
@@ -543,7 +542,8 @@ void DFRobot_VL53L1X::setDistanceThreshold(uint16_t ThreshLow, uint16_t ThreshHi
     readByteData(SYSTEM__INTERRUPT_CONFIG_GPIO, &Temp);
     Temp = Temp & 0x47;
 
-    writeByteData(SYSTEM__INTERRUPT_CONFIG_GPIO, ((Temp | (Window & 0x07)) | 0x40));
+    //writeByteData(SYSTEM__INTERRUPT_CONFIG_GPIO, ((Temp | (Window & 0x07)) | 0x40));
+    writeByteData(SYSTEM__INTERRUPT_CONFIG_GPIO, (Temp | (Window & 0x07)));
     writeWordData(SYSTEM__THRESH_HIGH, ThreshHigh);
     writeWordData(SYSTEM__THRESH_LOW, ThreshLow);
 }

@@ -24,24 +24,30 @@ void setup(void)
     Serial.println("Sensor init failed!");
     delay(1000);
   }
+  attachInterrupt(0, interrupt, RISING);
   sensor.setDistanceThreshold(200, 300, 0);//ThreshLow, ThreshHigh, Window(0 = below, 1 = above, 2 = out and 3 = in)
   Serial.println(sensor.getDistanceThresholdWindow());
   Serial.println(sensor.getDistanceThresholdLow());
   Serial.println(sensor.getDistanceThresholdHigh());
   sensor.setDistanceModeShort();
   sensor.startRanging();
+  //sensor.checkForDataReady();
+  delay(100);
 }
 
 void loop() 
 {
-  int distance = sensor.getDistance();
-  // Serial.print("Distance(mm): ");
-  // Serial.println(distance);
+  int distance
+  distance = sensor.getDistance();
+  //Serial.print("Distance(mm): ");
+  //Serial.println(distance);
+  
   Serial.println();
   delay(1000);
 }
 
 void interrupt(){
   Serial.println("distance is below 200mm");
+  Serial.println();
   delay(1000);
 }

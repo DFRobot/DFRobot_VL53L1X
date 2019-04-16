@@ -50,27 +50,6 @@ Download the library ZIP file and unzip it to the Arduino folder of the library.
 bool DFRobot_VL53L1X::begin();
 
 /*
- * @brief Gets the ambient count
- *
- * @return The detailed ambient count
- */
- 
-/*
- * @brief set DistanceState mode
- *        typedef enum {eShortDistance = 0, eMediumDistance = 1, eLongDistance = 2} eDistanceState_t;
- * 
- * @param distanceMode distanceMode to set eDistanceState;
- */
-void setDistanceMode(eDistanceState_t mode);
-
-/*
- * @brief Gets the distansce
- *
- * @return The detailed distance
- */
-float getDistance(void);
-
-/*
  * @brief Set the I2C address
  *
  */
