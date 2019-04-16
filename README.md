@@ -100,7 +100,7 @@ void startRanging();
 void stopRanging();
 
 /*
- * @brief Set timing budget in ms(15、20、33、50、100、200、500)
+ * @brief Set timing budget in ms(20、33、50、100、200、500)
  *
  */
 void setTimingBudgetInMs(uint16_t timingBudget);

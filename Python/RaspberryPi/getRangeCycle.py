@@ -20,7 +20,7 @@ sensor.setDistanceModeLong()
 The timing budget (TB) is the time required for the device to make one distance measurement
 TimingBudgetInMs = 20,33,50,100,200,500 ms
 '''
-sensor.setTimingBudgetInMs(15)
+sensor.setTimingBudgetInMs(20)
 '''
 The intermeasurement period  must be greater than or equal to the timing budget
 '''

@@ -99,7 +99,7 @@ def startRanging(self)
 def stopRanging(self)
 
 '''
-@brief Set timing budget in ms(15?20?33?50?100?200?500)
+@brief Set timing budget in ms(20?33?50?100?200?500)
 '''
 def setTimingBudgetInMs(self, timingBudget)
 

@@ -25,7 +25,7 @@ void setup(void)
     delay(1000);
   }
   /*The timing budget (TB) is the time required for the device to make one distance measurement*/
-  /*TimingBudgetInMs = 15、20、33、50、100、200、500 ms*/
+  /*TimingBudgetInMs = 20、33、50、100、200、500 ms*/
   sensor.setTimingBudgetInMs(20);
   /* The intermeasurement period  must be greater than or equal to the timing budget*/
   sensor.setInterMeasurementInMs(20);
