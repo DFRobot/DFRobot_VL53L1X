@@ -38,5 +38,10 @@ void setup(void)
 
 void loop(void)
 {
+  int distance
+  distance = sensor.getDistance();
+  Serial.print("Distance(mm): ");
+  Serial.println(distance);
   
+  Serial.println();
 }
