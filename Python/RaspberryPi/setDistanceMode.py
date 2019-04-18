@@ -57,13 +57,13 @@ def main():
     global IO1Lock, IO1Flag
     while True:
         sensor.clear_interrupt()
-        if IO1Flag:
+        while IO1Flag:
             IO1Lock.acquire() # wait io1 release
             IO1Flag = False
             IO1Lock.release()
             print ("Distance   :%.f" % sensor.get_distance())
             time.sleep(0.1)
-        time.sleep(1)
+        time.sleep(0.1)
 
 if __name__ == "__main__":
     main()

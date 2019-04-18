@@ -159,11 +159,8 @@ class VL53L1X:
         pInterruptPolarity = 0
     
         Temp = self.read_byte_data(self.GPIO_HV_MUX__CTRL)
-        print(Temp)
         Temp = Temp & 0x10
-        #print(Temp)
         pInterruptPolarity = not(Temp>>4)
-        #print(pInterruptPolarity)
         return pInterruptPolarity
 
     def start_ranging(self):
@@ -179,9 +176,6 @@ class VL53L1X:
 
         IntPol = self.get_interrupt_polarity()
         Temp = self.read_byte_data(self.GPIO__TIO_HV_STATUS)
-        print(IntPol)
-        print("11111")
-        print(Temp)
         time.sleep(0.5)
         if ((Temp & 1) == IntPol):
             return  1

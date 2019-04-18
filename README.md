@@ -26,8 +26,7 @@ The library makes it easy to configure the sensor via I2C and read range data fr
 ## Feature
 1. Serial input via I2C-bus
 2. Max sampling rate given by I2C-bus speed
-3. I2C address can be modified by modifying the macro definition
-4. Operating voltage range from 2.6 to 3.5V
+3. Operating voltage range from 2.6 to 3.5V
 
 ## Installation
 
@@ -90,13 +89,6 @@ void setDistanceModeLong();
  * @return The detailed distance
  */
 void setDistanceModeShort();
-
-/*
- * @brief Gets the distance mode
- *
- * @return distance mode(long or short)
- */
-uint8_t getDistanceMode();
 
 /*
  * @brief Set inter measurement in ms
@@ -179,27 +171,6 @@ uint16_t getDistanceThresholdLow();
 uint16_t getDistanceThresholdHigh(); 
 
 /*
- * @brief Set programs the ROI
- *
- * @param X is the ROI width and Y is the ROI height
- */
-void setROI(uint16_t X, uint16_t Y);
-
-/*
- * @brief This function programs a new signal threshold in kcps where the default is 1024 kcps
- *
- * @param Default is 1024 kcps
- */
-void setSignalThreshold(uint16_t Signal);
-
-/*
- * @brief Gets current signal threshold
- *
- * @return The  current signal threshold in kcps
- */
-uint16_t getSignalThreshold(); 
-
-/*
  * @brief Sets calibrate offset
  *
  * @param The target distance in mm
@@ -218,6 +189,12 @@ void calibrateXTalk(uint16_t targetDistInMm);
  */
 uint8_t gesture();
 
+/*
+ * @brief 1D eVL53L1X_ok            for ok 
+ *           eVL53L1X_InitError     for init error
+ *           eVL53L1X_WriteRegError for I2C write error
+ *           eVL53L1X_ReadRegError  for I2C read error
+ */
 eVL53L1X_Status lastOperateStatus;
 ```
 

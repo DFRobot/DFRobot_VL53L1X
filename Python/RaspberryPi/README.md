@@ -25,8 +25,7 @@ The library makes it easy to configure the sensor via I2C and read range data fr
 ## Feature
 1. Serial input via I2C-bus
 2. Max sampling rate given by I2C-bus speed
-3. I2C address can be modified by modifying the macro definition
-4. Operating voltage range from 2.6 to 3.5V
+3. Operating voltage range from 2.6 to 3.5V
 
 ## Installation
 
