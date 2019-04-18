@@ -1,5 +1,5 @@
 '''
-file get_distance.py
+file gesture.py
 SEN0302 and SEN0245 Distance Ranging Sensor
 The module is connected with RaspberryPi to read the distance
 This sensor output the distance between sensor and obstacles
@@ -21,17 +21,17 @@ def main():
         sensor.start_ranging()
         gesStatus = 0
         distance = sensor.get_distance()
-        while distance < 400:
+        if distance < 400:
             gesStatus = sensor.gesture()
             if(gesStatus == 1):
                 print("Current Gesture: DOWN")
-                time.sleep(0.1)
+                time.sleep(0.2)
             elif(gesStatus == 2):
                 print("Current Gesture: UP")
-                time.sleep(0.1)
+                time.sleep(0.2)
             else:
-                time.sleep(0.1)
-            time.sleep(0.1)
+                time.sleep(0.2)
+            time.sleep(0.2)
         sensor.stop_ranging()
 
 if __name__ == "__main__":

@@ -38,6 +38,11 @@ Download the library ZIP file and unzip it to the Arduino folder of the library.
 
 #include "DFRobot_VL53L1X.h"
 
+/*
+ * @brief init Wire
+ */
+DFRobot_VL53L1X(TwoWire *pWire);
+
 /* 
  * @brief To judge which one is being used 
  *

@@ -40,6 +40,11 @@ $> python VL53L1X.py
 
 ```Python
 
+'''
+@brief Init The VL53L1X
+
+'''
+VL53L1X(1)
 
 '''
 @brief To judge which one is being used 

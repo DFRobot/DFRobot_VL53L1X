@@ -21,12 +21,12 @@ from DFRobot_VL53L1X import VL53L1X
 
 sensor = VL53L1X(1) #VL53L1X begin
 #sensor.setInterruptPolarityHigh()
-sensor.set_distance_threshold(200, 400, 0)#ThreshLow, ThreshHigh, Window(0 = below, 1 = above, 2 = out and 3 = in)
+sensor.set_distance_mode_short()
+sensor.set_distance_threshold(300, 400, 1)#ThreshLow, ThreshHigh, Window(0 = below, 1 = above, 2 = out and 3 = in)
 print(sensor.get_distance_threshold_window())#0 = below, 1 = above, 2 = out and 3 = in
 print(sensor.get_distance_threshold_low())
 print(sensor.get_distance_threshold_high())
 #sensor.check_for_data_ready()
-sensor.set_distance_mode_short()
 #sensor.set_distance_mode_long()
 sensor.start_ranging()
 time.sleep(0.1)

@@ -176,7 +176,7 @@ class VL53L1X:
 
         IntPol = self.get_interrupt_polarity()
         Temp = self.read_byte_data(self.GPIO__TIO_HV_STATUS)
-        time.sleep(0.5)
+        time.sleep(0.001)
         if ((Temp & 1) == IntPol):
             return  1
         else:
@@ -611,4 +611,4 @@ class VL53L1X:
                 gestureStatus = 0
         else:
             gestureStatus = 0
-            return gestureStatus
+        return gestureStatus
