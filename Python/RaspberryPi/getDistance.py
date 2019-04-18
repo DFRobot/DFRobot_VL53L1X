@@ -1,8 +1,9 @@
 '''
-file getDistance.py
-SEN0302 and SEN0245 Distance Ranging Sensor
+file get_distance.py
+SEN0302 Distance Ranging Sensor
 The module is connected with RaspberryPi to read the distance
-This sensor output the distance between sensor and obstacles
+This demo can be used to calibrate the sensor(both of offset and cross talk)
+This demo output the distance between sensor and target
 Copyright    [DFRobot](http://www.dfrobot.com), 2018
 Copyright    GNU Lesser General Public License
 version  V1.0
@@ -17,19 +18,18 @@ from DFRobot_VL53L1X import VL53L1X
 sensor = VL53L1X(1) #VL53L1X begin
 while not sensor.begin():
     time.sleep(2)
-sensor.setOffset(30)
-#sensor.calibrateOffset(200)
-#sensor.setXTalk(400)
-#sensor.calibrateXTalk(400)
-#sensor.reset()
+sensor.set_offset(30)#This function apply the offset which found during calibration to the sensor
+#sensor.calibrate_offset(200)#This function set a certain distance to finds the offset and applies the offset
+#sensor.set_x_talk(400)#This function apply the cross talk which found during calibration to the sensor
+#sensor.calibrate_x_talk(400)#This function set a certain distance to finds the cross talk and applies the cross talk
 
 def main():
     while True:
-        sensor.startRanging()
+        sensor.start_ranging()
         time.sleep(1)
-        print ("Distance   : %.2f " % sensor.getDistance())
+        print ("Distance   : %.2f " % sensor.get_distance())
         print (" ")
-        sensor.stopRanging()
+        sensor.stop_ranging()
 
 if __name__ == "__main__":
     main()

@@ -1,7 +1,6 @@
 # VL53L1X
 
 VL53L1X and VL53L0X are laser range sensors with three distance modes.<br>
-VL53L0X's measurement range can reach up to 2m.<br>
 VL53L1X's measurement range can reach up to 4m.<br>
 
 ## DFRobot_VL53L1X Library for RaspberryPi
@@ -20,16 +19,14 @@ Provide a Raspberry Pi library for the VL53L1X modules.
 <content>
 
 ## Summary
-This is a library for the Arduino IDE, which can help Arduino to communicate with DFRobot_VL53L1X laser range sensor.<br>
+This is a library for the RaspBerryPi, which can help RaspBerryPi to communicate with DFRobot_VL53L1X laser range sensor.<br>
 The library makes it easy to configure the sensor via I2C and read range data from the sensor.<br>
-The library is compatible with DFRobot_VL53L0X.<br>
 
 ## Feature
-1. Low standby current
-2. Serial input via I2C-bus
-3. Max sampling rate given by I2C-bus speed
-4. I2C address can be modified by modifying the macro definition
-5. Operating voltage range from 2.6 to 3.5V
+1. Serial input via I2C-bus
+2. Max sampling rate given by I2C-bus speed
+3. I2C address can be modified by modifying the macro definition
+4. Operating voltage range from 2.6 to 3.5V
 
 ## Installation
 
@@ -52,41 +49,6 @@ $> python VL53L1X.py
 @return false if VL53L1X init failed
 '''
 def begin(self)
- 
-'''
-@brief Set the I2C address
-'''
-def (self, addr)
-
-'''
-@brief Gets the current I2C address
-
-@return The I2C address
-'''
-def getI2CAddress(self)
-
-'''
-@brief Sets interrupt polarity high
-'''
-def setInterruptPolarityHigh(self)
-
-'''
-@brief Sets interrupt polarity low
-'''
-
-def setInterruptPolarityLow(self)
-
-'''
-@brief Sets interrupt polarity(1 is high,0 is low)
-'''
-def setInterruptPolarity(self, NewPolarity)
-
-'''
-@brief Gets the interrupt polarity
-
-@return The interrupt polarity(1 is high,0 is low)
-'''
-def getInterruptPolarity(self)
 
 '''
 @brief enable range sensor
@@ -99,7 +61,7 @@ def startRanging(self)
 def stopRanging(self)
 
 '''
-@brief Set timing budget in ms(20?33?50?100?200?500)
+@brief Set timing budget in ms(20,33,50,100,200,500)
 '''
 def setTimingBudgetInMs(self, timingBudget)
 
@@ -123,16 +85,9 @@ def setDistanceModeLong(self)
 def setDistanceModeShort(self)
 
 '''
-@brief Set distance mode
-
-@param distance mode(long or short)
-'''
-def setDistanceMode(self, DM);
-
-'''
 @brief Gets the distance mode
 
-@return distance mode(long or short)
+@return distance mode(2 for long or 1 for short)
 '''
 def getDistanceMode(self)
 
@@ -165,25 +120,11 @@ def getDistance(self)
 def setOffset(self, OffsetValue);
 
 '''
-@brief Get offset calibration
-
-@return The detailed offset value
-'''
-def getOffset(self)
-
-'''
 @brief Set Xtalk calibration
 
 @param The detailed Xtalk value(depends on sensor works)
 '''
 def setXTalk(self, XtalkValue);
-
-'''
-@brief Get Xtalk calibration
-
-@return The detailed Xtalk value
-'''
-def getXTalk(self);
 
 '''
 @brief Set distance threshold
@@ -214,27 +155,6 @@ def getDistanceThresholdLow(self)
 @return The distance threshold high
 '''
 def getDistanceThresholdHigh(self)
-
-'''
-@brief Set programs the ROI
-
-@param X is the ROI width and Y is the ROI height
-'''
-def setROI(self, X, Y)
-
-'''
-@brief This function programs a new signal threshold in kcps where the default is 1024 kcps
-
-@param Default is 1024 kcps
-'''
-def setSignalThreshold(self, Signal);
-
-'''
-@brief Gets current signal threshold
-
-@return The  current signal threshold in kcps
-'''
-def getSignalThreshold(self)
 
 '''
 @brief Sets calibrate offset

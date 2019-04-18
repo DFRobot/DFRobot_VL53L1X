@@ -85,29 +85,29 @@ class VL53L1X:
     def begin(self):
         tmp = 0
         for Addr in range(0x2D,0x2d + len(self.VL51L1X_DEFAULT_CONFIGURATION)):
-            self.writeByteData(Addr, self.VL51L1X_DEFAULT_CONFIGURATION[Addr - 0x2D])
-        self.startRanging()
+            self.write_byte_data(Addr, self.VL51L1X_DEFAULT_CONFIGURATION[Addr - 0x2D])
+        self.start_ranging()
         while tmp == 0:
-            tmp = self.checkForDataReady()
+            tmp = self.check_for_data_ready()
             #print(tmp)
             time.sleep(1)
-        self.clearInterrupt()
-        self.writeByteData(0x0087, 0x00)
-        self.writeByteData(self.VL53L1_VHV_CONFIG__TIMEOUT_MACROP_LOOP_BOUND, 0x09)
-        self.writeByteData(0x0B, 0)
+        self.clear_interrupt()
+        self.write_byte_data(0x0087, 0x00)
+        self.write_byte_data(self.VL53L1_VHV_CONFIG__TIMEOUT_MACROP_LOOP_BOUND, 0x09)
+        self.write_byte_data(0x0B, 0)
         return True
         
-    def writeByteData(self, index, byte):
+    def write_byte_data(self, index, byte):
         self.i2cbus.write_i2c_block_data(self.i2cAddr, index >> 8, [index & 0xff, byte])
 
-    def writeWordData(self, index, value):
+    def write_word_data(self, index, value):
         buffer = []
         buffer.append(index & 0xff)
         buffer.append(value >> 8)
         buffer.append(value & 0xff)
         self.i2cbus.write_i2c_block_data(self.i2cAddr, index >> 8, buffer)
 
-    def writeWordData32(self, index, value):
+    def write_word_data_32(self, index, value):
         buffer = []
         buffer.append(index & 0xff)
         buffer.append(value >> 24 & 0xff)
@@ -116,49 +116,49 @@ class VL53L1X:
         buffer.append(value & 0xff)
         self.i2cbus.write_i2c_block_data(self.i2cAddr, index >> 8, buffer)
 
-    def readByteData(self, index):
+    def read_byte_data(self, index):
         self.i2cbus.write_i2c_block_data(self.i2cAddr, index >> 8, [index & 0xff])
         return self.i2cbus.read_byte(self.i2cAddr)
 
-    def readWordData(self, index):
-        rslt1 = self.readByteData(index)
-        rslt2 = self.readByteData(index + 1)
+    def read_word_data(self, index):
+        rslt1 = self.read_byte_data(index)
+        rslt2 = self.read_byte_data(index + 1)
         return ((rslt1 << 8)| rslt2)
         
-    def readWordData32(self, index):
-        rslt1 = self.readByteData(index)
-        rslt2 = self.readByteData(index + 1)
-        rslt3 = self.readByteData(index + 2)
-        rslt4 = self.readByteData(index + 3)
+    def read_word_data_32(self, index):
+        rslt1 = self.read_byte_data(index)
+        rslt2 = self.read_byte_data(index + 1)
+        rslt3 = self.read_byte_data(index + 2)
+        rslt4 = self.read_byte_data(index + 3)
         return ((rslt1 << 24)| (rslt2 << 16)|(rslt3 << 8)| rslt4)
 
-    def setI2CAddress(self, address):
-        self.writeByteData(self.VL53L1_I2C_SLAVE__DEVICE_ADDRESS, address >> 1)
+    def set_i2c_address(self, address):
+        self.write_byte_data(self.VL53L1_I2C_SLAVE__DEVICE_ADDRESS, address >> 1)
         _addr = address
 
-    def getI2CAddress(self):
+    def get_i2c_address(self):
         return self._addr
 
-    def clearInterrupt(self):
-        self.writeByteData(self.SYSTEM__INTERRUPT_CLEAR, 0x01)
+    def clear_interrupt(self):
+        self.write_byte_data(self.SYSTEM__INTERRUPT_CLEAR, 0x01)
 
-    def setInterruptPolarityHigh(self):
-        self.setInterruptPolarity(1)
+    def set_interrupt_polarity_high(self):
+        self.set_interrupt_polarity(1)
 
-    def setInterruptPolarityLow(self):
-        self.setInterruptPolarity(0)
+    def set_interrupt_polarity_low(self):
+        self.set_interrupt_polarity(0)
 
-    def setInterruptPolarity(self, NewPolarity):
+    def set_interrupt_polarity(self, NewPolarity):
         Temp = 0
-        Temp = self.readByteData(self.GPIO_HV_MUX__CTRL)
+        Temp = self.read_byte_data(self.GPIO_HV_MUX__CTRL)
         Temp = Temp & 0xEF
-        self.writeByteData(self.GPIO_HV_MUX__CTRL, Temp | (not(NewPolarity & 1)) << 4)
+        self.write_byte_data(self.GPIO_HV_MUX__CTRL, Temp | (not(NewPolarity & 1)) << 4)
 
-    def getInterruptPolarity(self):
+    def get_interrupt_polarity(self):
         Temp = 0
         pInterruptPolarity = 0
     
-        Temp = self.readByteData(self.GPIO_HV_MUX__CTRL)
+        Temp = self.read_byte_data(self.GPIO_HV_MUX__CTRL)
         print(Temp)
         Temp = Temp & 0x10
         #print(Temp)
@@ -166,19 +166,19 @@ class VL53L1X:
         #print(pInterruptPolarity)
         return pInterruptPolarity
         
-    def startRanging(self):
-        self.writeByteData(self.SYSTEM__MODE_START, 0x40)
+    def start_ranging(self):
+        self.write_byte_data(self.SYSTEM__MODE_START, 0x40)
 
-    def stopRanging(self):
-        self.writeByteData(self.SYSTEM__MODE_START, 0x00)
+    def stop_ranging(self):
+        self.write_byte_data(self.SYSTEM__MODE_START, 0x00)
 
-    def checkForDataReady(self):
+    def check_for_data_ready(self):
         Temp =0
         IntPol = 0
         isDataReady = 0
 
-        IntPol = self.getInterruptPolarity()
-        Temp = self.readByteData(self.GPIO__TIO_HV_STATUS)
+        IntPol = self.get_interrupt_polarity()
+        Temp = self.read_byte_data(self.GPIO__TIO_HV_STATUS)
         print(IntPol)
         print("11111")
         print(Temp)
@@ -188,65 +188,65 @@ class VL53L1X:
         else:
             return  0
 
-    def setTimingBudgetInMs(self, timingBudget):
+    def set_timing_budget_in_ms(self, timingBudget):
         DM = 0
     
-        DM = self.getDistanceMode()
+        DM = self.get_distance_mode()
         #print(DM)
         if (DM == 0):
             return 1
         elif (DM == 1):
             if (timingBudget == 15):
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x01D)
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x0027)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x01D)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x0027)
             elif (timingBudget == 20):
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x0051)
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x006E)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x0051)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x006E)
             elif (timingBudget == 33):
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x00D6)
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x006E)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x00D6)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x006E)
             elif (timingBudget == 50):
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x1AE)
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x01E8)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x1AE)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x01E8)
             elif (timingBudget == 100):
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x02E1)
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x0388)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x02E1)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x0388)
             elif (timingBudget == 200):
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x03E1)
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x0496)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x03E1)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x0496)
             elif (timingBudget == 500):
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x0591)
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x05C1)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x0591)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x05C1)
             else:
                 print(" ")
             
         else:
             if (timingBudget == 20):
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x001E)
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x0022)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x001E)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x0022)
             elif (timingBudget == 33):
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x0060)
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x006E)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x0060)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x006E)
             elif (timingBudget == 50):
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x00AD)
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x00C6)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x00AD)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x00C6)
             elif (timingBudget == 100):
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x01CC)
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x01EA)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x01CC)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x01EA)
             elif (timingBudget == 200):
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x02D9)
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x02F8)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x02D9)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x02F8)
             elif (timingBudget == 500):
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x048F)
-                self.writeWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x04A4)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x048F)
+                self.write_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x04A4)
             else:
                 print(" ")
 
-    def getTimingBudgetInMs(self):
+    def get_timing_budget_in_ms(self):
         Temp = 0
         pTimingBudget = 0
     
-        Temp = self.readWordData(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI)
+        Temp = self.read_word_data(self.RANGE_CONFIG__TIMEOUT_MACROP_A_HI)
         #print(Temp)
         if (Temp == 0x001D):
             pTimingBudget = 15
@@ -266,125 +266,125 @@ class VL53L1X:
             pTimingBudget = 0
         return pTimingBudget
 
-    def setDistanceModeLong(self):
-        self.setDistanceMode(2)
+    def set_distance_mode_long(self):
+        self.set_distance_mode(2)
 
-    def setDistanceModeShort(self):
-        self.setDistanceMode(1)
+    def set_distance_mode_short(self):
+        self.set_distance_mode(1)
 
-    def setDistanceMode(self, DM):
+    def set_distance_mode(self, DM):
         TB = 0
     
-        TB = self.getTimingBudgetInMs()
+        TB = self.get_timing_budget_in_ms()
         if (DM == 1):
-            self.writeByteData(self.PHASECAL_CONFIG__TIMEOUT_MACROP, 0x14)
-            self.writeByteData(self.RANGE_CONFIG__VCSEL_PERIOD_A, 0x07)
-            self.writeByteData(self.RANGE_CONFIG__VCSEL_PERIOD_B, 0x05)
-            self.writeByteData(self.RANGE_CONFIG__VALID_PHASE_HIGH, 0x38)
-            self.writeWordData(self.SD_CONFIG__WOI_SD0, 0x0705)
-            self.writeWordData(self.SD_CONFIG__INITIAL_PHASE_SD0, 0x0606)
+            self.write_byte_data(self.PHASECAL_CONFIG__TIMEOUT_MACROP, 0x14)
+            self.write_byte_data(self.RANGE_CONFIG__VCSEL_PERIOD_A, 0x07)
+            self.write_byte_data(self.RANGE_CONFIG__VCSEL_PERIOD_B, 0x05)
+            self.write_byte_data(self.RANGE_CONFIG__VALID_PHASE_HIGH, 0x38)
+            self.write_word_data(self.SD_CONFIG__WOI_SD0, 0x0705)
+            self.write_word_data(self.SD_CONFIG__INITIAL_PHASE_SD0, 0x0606)
         elif (DM == 2):
-            self.writeByteData(self.PHASECAL_CONFIG__TIMEOUT_MACROP, 0x0A)
-            self.writeByteData(self.RANGE_CONFIG__VCSEL_PERIOD_A, 0x0F)
-            self.writeByteData(self.RANGE_CONFIG__VCSEL_PERIOD_B, 0x0D)
-            self.writeByteData(self.RANGE_CONFIG__VALID_PHASE_HIGH, 0xB8)
-            self.writeWordData(self.SD_CONFIG__WOI_SD0, 0x0F0D)
-            self.writeWordData(self.SD_CONFIG__INITIAL_PHASE_SD0, 0x0E0E)
+            self.write_byte_data(self.PHASECAL_CONFIG__TIMEOUT_MACROP, 0x0A)
+            self.write_byte_data(self.RANGE_CONFIG__VCSEL_PERIOD_A, 0x0F)
+            self.write_byte_data(self.RANGE_CONFIG__VCSEL_PERIOD_B, 0x0D)
+            self.write_byte_data(self.RANGE_CONFIG__VALID_PHASE_HIGH, 0xB8)
+            self.write_word_data(self.SD_CONFIG__WOI_SD0, 0x0F0D)
+            self.write_word_data(self.SD_CONFIG__INITIAL_PHASE_SD0, 0x0E0E)
         else:
             print(" ")
-        self.setTimingBudgetInMs(TB)
+        self.set_timing_budget_in_ms(TB)
 
-    def getDistanceMode(self):
+    def get_distance_mode(self):
         TempDM = 0
         DM = 0
     
-        TempDM = self.readByteData(self.PHASECAL_CONFIG__TIMEOUT_MACROP)
+        TempDM = self.read_byte_data(self.PHASECAL_CONFIG__TIMEOUT_MACROP)
         if (TempDM == 0x14):
             DM=1
         elif(TempDM == 0x0A):
             DM=2
         return DM
 
-    def setInterMeasurementInMs(self, InterMeasMs):
+    def set_inter_measurement_in_ms(self, InterMeasMs):
         ClockPLL = 0
     
-        ClockPLL = self.readWordData(self.VL53L1_RESULT__OSC_CALIBRATE_VAL)
+        ClockPLL = self.read_word_data(self.VL53L1_RESULT__OSC_CALIBRATE_VAL)
         ClockPLL = ClockPLL & 0x3FF
-        self.writeWordData32(self.VL53L1_SYSTEM__INTERMEASUREMENT_PERIOD, (ClockPLL * InterMeasMs * 1066 / 1000))
+        self.write_word_data_32(self.VL53L1_SYSTEM__INTERMEASUREMENT_PERIOD, (ClockPLL * InterMeasMs * 1066 / 1000))
 
-    def getInterMeasurementInMs(self):
+    def get_inter_measurement_in_ms(self):
         ClockPLL = 0
         pIM = 0
         tmp = 0
-        tmp = self.readWordData32(self.VL53L1_SYSTEM__INTERMEASUREMENT_PERIOD)
+        tmp = self.read_word_data_32(self.VL53L1_SYSTEM__INTERMEASUREMENT_PERIOD)
         pIM = tmp
-        ClockPLL = self.readWordData(self.VL53L1_RESULT__OSC_CALIBRATE_VAL)
+        ClockPLL = self.read_word_data(self.VL53L1_RESULT__OSC_CALIBRATE_VAL)
         ClockPLL = ClockPLL & 0x3FF
         pIM= pIM/(ClockPLL*1.065)
         return pIM
 
-    def bootState(self):
+    def boot_state(self):
         tmp = 0
     
-        tmp = self.readByteData(self.VL53L1_FIRMWARE__SYSTEM_STATUS)
+        tmp = self.read_byte_data(self.VL53L1_FIRMWARE__SYSTEM_STATUS)
         return tmp
 
-    def getDistance(self):
+    def get_distance(self):
         tmp = 0
   
-        tmp = self.readWordData(self.VL53L1_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0)
-        self.clearInterrupt()
+        tmp = self.read_word_data(self.VL53L1_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0)
+        self.clear_interrupt()
         return tmp
 
-    def getSignalPerSpad(self):
+    def get_signal_per_spad(self):
         SpNb = 1
         signal = 0
         signalRate = 0
     
-        signal = self.readWordData(self.VL53L1_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0)
-        SpNb = self.readWordData(self.VL53L1_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0)
+        signal = self.read_word_data(self.VL53L1_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0)
+        SpNb = self.read_word_data(self.VL53L1_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0)
         signalRate = 2000.0 * signal / SpNb
         return signalRate
 
-    def getAmbientPerSpad(self):
+    def get_ambient_per_spad(self):
         AmbientRate = 0
         SpNb = 1
         ambPerSp = 0
     
-        AmbientRate = self.readWordData(self.RESULT__AMBIENT_COUNT_RATE_MCPS_SD)
-        SpNb = self.readWordData(self.VL53L1_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0)
+        AmbientRate = self.read_word_data(self.RESULT__AMBIENT_COUNT_RATE_MCPS_SD)
+        SpNb = self.read_word_data(self.VL53L1_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0)
         ambPerSp=2000.0 * AmbientRate / SpNb
         return ambPerSp
 
 
-    def getSignalRate(self):
+    def get_signa_rate(self):
         tmp = 0
     
-        tmp = self.readWordData(self.VL53L1_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0)
+        tmp = self.read_word_data(self.VL53L1_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0)
         tmp = tmp * 8
         return tmp
 
 
-    def getSpadNb(self):
+    def get_spad_nb(self):
         tmp = 0
     
-        tmp = self.readWordData(self.VL53L1_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0)
+        tmp = self.read_word_data(self.VL53L1_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0)
         tmp = tmp >> 8
         return tmp
 
-    def getAmbientRate(self):
+    def get_ambient_rate(self):
         ambRate = 0
         tmp = 0
     
-        tmp = self.readWordData(self.RESULT__AMBIENT_COUNT_RATE_MCPS_SD)
+        tmp = self.read_word_data(self.RESULT__AMBIENT_COUNT_RATE_MCPS_SD)
         ambRate = tmp*8
         return ambRate
 
-    def getRangeStatus(self):
+    def get_range_status(self):
         rangeStatus = 0
         RgSt = 0
     
-        RgSt = self.readByteData(self.VL53L1_RESULT__RANGE_STATUS)
+        RgSt = self.read_byte_data(self.VL53L1_RESULT__RANGE_STATUS)
         RgSt = RgSt&0x1F
         if (RgSt == 9):
             RgSt = 0
@@ -417,161 +417,161 @@ class VL53L1X:
         rangeStatus = RgSt
         return rangeStatus
 
-    def setOffset(self, OffsetValue):
+    def set_offset(self, OffsetValue):
         Temp = (OffsetValue * 4)
-        self.writeWordData(self.ALGO__PART_TO_PART_RANGE_OFFSET_MM, Temp)
-        self.writeWordData(self.MM_CONFIG__INNER_OFFSET_MM, 0x0)
-        self.writeWordData(self.MM_CONFIG__OUTER_OFFSET_MM, 0x0)
+        self.write_word_data(self.ALGO__PART_TO_PART_RANGE_OFFSET_MM, Temp)
+        self.write_word_data(self.MM_CONFIG__INNER_OFFSET_MM, 0x0)
+        self.write_word_data(self.MM_CONFIG__OUTER_OFFSET_MM, 0x0)
 
-    def getOffset(self):
+    def get_offset(self):
         offset = 0
         Temp = 0
     
-        Temp = self.readWordData(self.ALGO__PART_TO_PART_RANGE_OFFSET_MM)
+        Temp = self.read_word_data(self.ALGO__PART_TO_PART_RANGE_OFFSET_MM)
         Temp = Temp << 3
         Temp = Temp >> 5
         offset = (int16_t)(Temp)
         return offset
 
-    def setXTalk(self, XtalkValue):
-        self.writeWordData(self.ALGO__CROSSTALK_COMPENSATION_X_PLANE_GRADIENT_KCPS, 0x0000)
-        self.writeWordData(self.ALGO__CROSSTALK_COMPENSATION_Y_PLANE_GRADIENT_KCPS, 0x0000)
-        self.writeWordData(self.ALGO__CROSSTALK_COMPENSATION_PLANE_OFFSET_KCPS, (XtalkValue<<9)/1000)
+    def set_x_talk(self, XtalkValue):
+        self.write_word_data(self.ALGO__CROSSTALK_COMPENSATION_X_PLANE_GRADIENT_KCPS, 0x0000)
+        self.write_word_data(self.ALGO__CROSSTALK_COMPENSATION_Y_PLANE_GRADIENT_KCPS, 0x0000)
+        self.write_word_data(self.ALGO__CROSSTALK_COMPENSATION_PLANE_OFFSET_KCPS, (XtalkValue<<9)/1000)
 
-    def getXTalk(self):
+    def get_x_talk(self):
         xtalk = 0
         tmp = 0
     
-        tmp = self.readWordData(self.ALGO__CROSSTALK_COMPENSATION_PLANE_OFFSET_KCPS)
+        tmp = self.read_word_data(self.ALGO__CROSSTALK_COMPENSATION_PLANE_OFFSET_KCPS)
         xtalk = (tmp*1000)>>9
         return xtalk
 
 
-    def setDistanceThreshold(self, ThreshLow, ThreshHigh, Window):
+    def set_distance_threshold(self, ThreshLow, ThreshHigh, Window):
         Temp = 0
     
-        Temp = self.readByteData(self.SYSTEM__INTERRUPT_CONFIG_GPIO)
+        Temp = self.read_byte_data(self.SYSTEM__INTERRUPT_CONFIG_GPIO)
         Temp = Temp & 0x47
     
-        self.writeByteData(self.SYSTEM__INTERRUPT_CONFIG_GPIO, (Temp | (Window & 0x07)))
-        self.writeWordData(self.SYSTEM__THRESH_HIGH, ThreshHigh)
-        self.writeWordData(self.SYSTEM__THRESH_LOW, ThreshLow)
+        self.write_byte_data(self.SYSTEM__INTERRUPT_CONFIG_GPIO, (Temp | (Window & 0x07)))
+        self.write_word_data(self.SYSTEM__THRESH_HIGH, ThreshHigh)
+        self.write_word_data(self.SYSTEM__THRESH_LOW, ThreshLow)
 
-    def getDistanceThresholdWindow(self):
+    def get_distance_threshold_window(self):
         window = 0
         tmp = 0
-        tmp = self.readByteData(self.SYSTEM__INTERRUPT_CONFIG_GPIO)
+        tmp = self.read_byte_data(self.SYSTEM__INTERRUPT_CONFIG_GPIO)
         window = tmp & 0x7
         return window
 
-    def getDistanceThresholdLow(self):
+    def get_distance_threshold_low(self):
         low = 0
         tmp = 0
     
-        tmp = self.readWordData(self.SYSTEM__THRESH_LOW)
+        tmp = self.read_word_data(self.SYSTEM__THRESH_LOW)
         low = tmp
         return low
 
-    def getDistanceThresholdHigh(self):
+    def get_distance_threshold_high(self):
         high = 0
         tmp = 0
 
-        tmp = self.readWordData(self.SYSTEM__THRESH_HIGH)
+        tmp = self.read_word_data(self.SYSTEM__THRESH_HIGH)
         high = tmp
         return high
 
-    def setROI(uX, uY):
+    def set_ROI(uX, uY):
         OpticalCenter = 0
 
-        OpticalCenter = self.readByteData(self.VL53L1_ROI_CONFIG__MODE_ROI_CENTRE_SPAD)
+        OpticalCenter = self.read_byte_data(self.VL53L1_ROI_CONFIG__MODE_ROI_CENTRE_SPAD)
         if (X > 16):
             X = 16
         if (Y > 16):
             Y = 16
         if (X > 10 or Y > 10):
             OpticalCenter = 199
-        self.writeByteData(self.ROI_CONFIG__USER_ROI_CENTRE_SPAD, OpticalCenter)
-        self.writeByteData(self.ROI_CONFIG__USER_ROI_REQUESTED_GLOBAL_XY_SIZE, (Y - 1) << 4 | (X - 1))
+        self.write_byte_data(self.ROI_CONFIG__USER_ROI_CENTRE_SPAD, OpticalCenter)
+        self.write_byte_data(self.ROI_CONFIG__USER_ROI_REQUESTED_GLOBAL_XY_SIZE, (Y - 1) << 4 | (X - 1))
 
-    def getROIX(self):
+    def get_ROI_x(self):
         tmp = 0
         ROI_X = 0
     
-        tmp = self.readByteData(self.ROI_CONFIG__USER_ROI_REQUESTED_GLOBAL_XY_SIZE)
+        tmp = self.read_byte_data(self.ROI_CONFIG__USER_ROI_REQUESTED_GLOBAL_XY_SIZE)
         ROI_X = (tmp & 0x0F) + 1
         return ROI_X
 
-    def getROIY(self):
+    def get_ROI_y(self):
         tmp = 0
         ROI_Y = 0
     
-        tmp = self.readByteData(self.ROI_CONFIG__USER_ROI_REQUESTED_GLOBAL_XY_SIZE)
+        tmp = self.read_byte_data(self.ROI_CONFIG__USER_ROI_REQUESTED_GLOBAL_XY_SIZE)
         ROI_Y = ((tmp & 0xF0) >> 4) + 1
         return ROI_Y
 
-    def setSignalThreshold(uSignal):
-        self.writeWordData(self.RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS,Signal>>3)
+    def set_signal_threshold(uSignal):
+        self.write_word_data(self.RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS,Signal>>3)
 
-    def getSignalThreshold(self):
+    def get_signal_threshold(self):
         signal = 0
         tmp = 0
     
-        tmp = self.readWordData(self.RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS)
+        tmp = self.read_word_data(self.RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS)
         signal = tmp <<3
         return signal
 
-    def setSigmaThreshold(uSigma):
+    def set_sigma_threshold(uSigma):
         if(Sigma > (0xFFFF>>2)):
             return 1
-        self.writeWordData(self.RANGE_CONFIG__SIGMA_THRESH,Sigma<<2)
+        self.write_word_data(self.RANGE_CONFIG__SIGMA_THRESH,Sigma<<2)
 
-    def getSigmaThreshold(self):
+    def get_sigma_threshold(self):
         sigma = 0
         tmp = 0
     
-        tmp = self.readWordData(self.RANGE_CONFIG__SIGMA_THRESH)
+        tmp = self.read_word_data(self.RANGE_CONFIG__SIGMA_THRESH)
         sigma = tmp >> 2
         return sigma
 
-    def startTemperatureUpdate(self):
+    def start_temperature_update(self):
         tmp = 0
         
-        self.writeByteData(self.VL53L1_VHV_CONFIG__TIMEOUT_MACROP_LOOP_BOUND,0x81)
-        self.writeByteData(0x0B,0x92)
-        self.startRanging()
+        self.write_byte_data(self.VL53L1_VHV_CONFIG__TIMEOUT_MACROP_LOOP_BOUND,0x81)
+        self.write_byte_data(0x0B,0x92)
+        self.start_ranging()
         while(tmp==0):
-            tmp = self.checkForDataReady()
+            tmp = self.check_for_data_ready()
             time.sleep(0.5)
-        self.clearInterrupt()
-        self.stopRanging()
-        self.writeByteData(self.VL53L1_VHV_CONFIG__TIMEOUT_MACROP_LOOP_BOUND, 0x09)
-        self.writeByteData(0x0B, 0)
+        self.clear_interrupt()
+        self.stop_ranging()
+        self.write_byte_data(self.VL53L1_VHV_CONFIG__TIMEOUT_MACROP_LOOP_BOUND, 0x09)
+        self.write_byte_data(0x0B, 0)
 
-    def calibrateOffset(utargetDistInMm):
-            offset = getOffset()
+    def calibrate_offset(utargetDistInMm):
+            offset = get_offset()
             i = 0
             tmp = 0
             AverageDistance = 0
             udistance = 0
         
-            self.writeWordData(self.ALGO__PART_TO_PART_RANGE_OFFSET_MM, 0x0)
-            self.writeWordData(self.MM_CONFIG__INNER_OFFSET_MM, 0x0)
-            self.writeWordData(self.MM_CONFIG__OUTER_OFFSET_MM, 0x0)
-            self.startRanging()
+            self.write_word_data(self.ALGO__PART_TO_PART_RANGE_OFFSET_MM, 0x0)
+            self.write_word_data(self.MM_CONFIG__INNER_OFFSET_MM, 0x0)
+            self.write_word_data(self.MM_CONFIG__OUTER_OFFSET_MM, 0x0)
+            self.start_ranging()
             for i in range(0, 50):
                 while (tmp == 0):
-                    tmp = self.checkForDataReady()
+                    tmp = self.check_for_data_ready()
                     time.sleep(0.5)
-                distance = self.getDistance()
-                clearInterrupt()
+                distance = self.get_distance()
+                clear_interrupt()
                 AverageDistance = AverageDistance + distance
-            self.stopRanging()
+            self.stop_ranging()
             AverageDistance = AverageDistance / 50
             offset = targetDistInMm - AverageDistance
-            self.writeWordData(self.ALGO__PART_TO_PART_RANGE_OFFSET_MM, offset*4)
+            self.write_word_data(self.ALGO__PART_TO_PART_RANGE_OFFSET_MM, offset*4)
 
-    def calibrateXTalk(utargetDistInMm):
-        uxTalk = getXTalk()
+    def calibrate_x_talk(utargetDistInMm):
+        uxTalk = get_x_talk()
         i = 0
         tmp = 0
         AverageSignalRate = 0
@@ -581,37 +581,40 @@ class VL53L1X:
         spadNum = 0
         usr = 0
     
-        self.writeWordData(0x0016,0)
-        self.startRanging()
+        self.write_word_data(0x0016,0)
+        self.start_ranging()
         for i in range(0, 50):
             while (tmp == 0):
-                tmp = checkForDataReady()
+                tmp = check_for_data_ready()
                 time.sleep(0.5)
-            sr = getSignalRate()
-            distance = self.getDistance()
-            self.clearInterrupt()
+            sr = get_signa_rate()
+            distance = self.get_distance()
+            self.clear_interrupt()
             AverageDistance = AverageDistance + distance
-            spadNum = self.getSignalRate()
+            spadNum = self.get_signa_rate()
             AverageSpadNb = AverageSpadNb + spadNum
             AverageSignalRate = AverageSignalRate + sr
-        self.stopRanging()
+        self.stop_ranging()
         AverageDistance = AverageDistance / 50
         AverageSpadNb = AverageSpadNb / 50
         AverageSignalRate = AverageSignalRate / 50
         xTalk = 512*(AverageSignalRate*(1-(AverageDistance/targetDistInMm)))/AverageSpadNb
-        self.writeWordData(0x0016, xTalk)
+        self.write_word_data(0x0016, xTalk)
 
     def gesture(self):
-        self.setDistanceThreshold(50, 400, 3)
+        self.set_distance_threshold(50, 400, 3)
         gestureStatus = 0
         self.dis1 = self.dis2
-        self.dis2 = self.getDistance()
+        self.dis2 = self.get_distance()
         self.dis = self.dis2 - self.dis1
         time.sleep(0.01)
-        if(self.dis < (-100)):
-            gestureStatus = 1
-        elif(self.dis > 100):
-            gestureStatus = 2
+        if self.dis1 < 400 and self.dis2 < 400:
+            if(self.dis < (-100)):
+                gestureStatus = 1
+            elif(self.dis > 100):
+                gestureStatus = 2
+            else:
+                gestureStatus = 0
         else:
             gestureStatus = 0
-        return gestureStatus
+            return gestureStatus

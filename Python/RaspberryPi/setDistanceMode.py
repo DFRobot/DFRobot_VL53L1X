@@ -1,12 +1,13 @@
 '''
-file getDistance.py
-SEN0302 and SEN0245 Distance Ranging Sensor
+file get_distance.py
+SEN0302 Distance Ranging Sensor
 The module is connected with RaspberryPi to read the distance
-This sensor output the distance between sensor and obstacles
-Copyright    [DFRobot](http://www.dfrobot.com), 2018
+This demo can set distance mode(short for 2m, long for 4m)
+This demo can set Threshold and get distance inside the threshold
+Copyright    [DFRobot](http://www.dfrobot.com), 2016
 Copyright    GNU Lesser General Public License
 version  V1.0
-date  2018-12-11
+date  2019-4-18
 '''
 
 import time
@@ -20,14 +21,14 @@ from DFRobot_VL53L1X import VL53L1X
 
 sensor = VL53L1X(1) #VL53L1X begin
 #sensor.setInterruptPolarityHigh()
-sensor.setDistanceThreshold(200, 400, 0)#ThreshLow, ThreshHigh, Window(0 = below, 1 = above, 2 = out and 3 = in)
-print(sensor.getDistanceThresholdWindow())
-print(sensor.getDistanceThresholdLow())
-print(sensor.getDistanceThresholdHigh())
-#sensor.checkForDataReady()
-sensor.setDistanceModeShort()
-#sensor.setDistanceModeLong()
-sensor.startRanging()
+sensor.set_distance_threshold(200, 400, 0)#ThreshLow, ThreshHigh, Window(0 = below, 1 = above, 2 = out and 3 = in)
+print(sensor.get_distance_threshold_window())#0 = below, 1 = above, 2 = out and 3 = in
+print(sensor.get_distance_threshold_low())
+print(sensor.get_distance_threshold_high())
+#sensor.check_for_data_ready()
+sensor.set_distance_mode_short()
+#sensor.set_distance_mode_long()
+sensor.start_ranging()
 time.sleep(0.1)
 '''
 while True:
@@ -55,15 +56,12 @@ io1.setInterrupt(GPIO.RISING, IO1CallBack)
 def main():
     global IO1Lock, IO1Flag
     while True:
-        #print(sensor.checkForDataReady())
-        print ("Distance   : %.2f " % sensor.getDistance())
-        print (" ")
+        sensor.clear_interrupt()
         if IO1Flag:
             IO1Lock.acquire() # wait io1 release
             IO1Flag = False
             IO1Lock.release()
-            print("distance is below 200mm")
-            print()
+            print ("Distance   :%.f" % sensor.get_distance())
             time.sleep(0.1)
         time.sleep(1)
 

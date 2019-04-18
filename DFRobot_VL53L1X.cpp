@@ -116,7 +116,7 @@ bool DFRobot_VL53L1X::begin()
     lastOperateStatus = eVL53L1X_ok;
     return true;
 }
-
+/*
 void DFRobot_VL53L1X::setI2CAddress(uint8_t address)
 {
     writeByteData(VL53L1_I2C_SLAVE__DEVICE_ADDRESS, address >> 1);
@@ -127,12 +127,13 @@ int DFRobot_VL53L1X::getI2CAddress()
 {
     return _addr;
 }
-
+*/
 void DFRobot_VL53L1X::clearInterrupt()
 {
     writeByteData(SYSTEM__INTERRUPT_CLEAR, 0x01);
+    //Serial.println("111111");
 }
-
+/*
 void DFRobot_VL53L1X::setInterruptPolarityHigh()
 {
     setInterruptPolarity(1);
@@ -150,12 +151,12 @@ void DFRobot_VL53L1X::setInterruptPolarity(uint8_t NewPolarity){
     Temp = Temp & 0xEF;
     writeByteData(GPIO_HV_MUX__CTRL, Temp | (!(NewPolarity & 1)) << 4);
 }
-
+*/
 /**
  * This function gets the interrupt polarity\n
  * 1=active high (default), 0=active low
  */
- 
+
 uint8_t DFRobot_VL53L1X::getInterruptPolarity()
 {
     uint8_t Temp;
@@ -184,15 +185,17 @@ bool DFRobot_VL53L1X::checkForDataReady()
     uint8_t isDataReady;
 
     IntPol = getInterruptPolarity();
+    //Serial.println(IntPol);
     readByteData(GPIO__TIO_HV_STATUS, &Temp);
-    delay(500);
+    //Serial.println(Temp);
+    delay(1);
     if ((Temp & 1) == IntPol)
         return  1;
     else
         return  0;
 }
 
-void DFRobot_VL53L1X::setTimingBudgetInMs(uint16_t timingBudget)
+void DFRobot_VL53L1X::setTimingBudgetInMs(eTimingBudget timingBudget)
 {
     uint16_t DM;
 
@@ -202,7 +205,7 @@ void DFRobot_VL53L1X::setTimingBudgetInMs(uint16_t timingBudget)
     else if (DM == 1) {    /* Short DistanceMode */
         switch (timingBudget) {
         case 15: /* only available in short distance mode */
-            writeWordData(RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x01D);
+            writeWordData(RANGE_CONFIG__TIMEOUT_MACROP_A_HI, 0x001D);
             writeWordData(RANGE_CONFIG__TIMEOUT_MACROP_B_HI, 0x0027);
             break;
         case 20:
@@ -389,7 +392,7 @@ uint16_t DFRobot_VL53L1X::getDistance()
     clearInterrupt();
     return tmp;
 }
-
+/*
 uint16_t DFRobot_VL53L1X::getSignalPerSpad()
 {
     uint16_t SpNb=1, signal;
@@ -495,7 +498,7 @@ uint8_t DFRobot_VL53L1X::getRangeStatus()
     rangeStatus = RgSt;
     return rangeStatus;
 }
-
+*/
 void DFRobot_VL53L1X::setOffset(int16_t OffsetValue)
 {
     int16_t Temp;
@@ -535,7 +538,7 @@ uint16_t DFRobot_VL53L1X::getXTalk()
     return xtalk;
 }
 
-void DFRobot_VL53L1X::setDistanceThreshold(uint16_t ThreshLow, uint16_t ThreshHigh, uint8_t Window)
+void DFRobot_VL53L1X::setDistanceThreshold(uint16_t ThreshLow, uint16_t ThreshHigh, eWindows Window)
 {
     uint8_t Temp = 0;
 
@@ -575,7 +578,7 @@ uint16_t DFRobot_VL53L1X::getDistanceThresholdHigh()
     high = tmp;
     return high;
 }
-
+/*
 void DFRobot_VL53L1X::setROI(uint16_t X, uint16_t Y)
 {
     uint8_t OpticalCenter;
@@ -662,7 +665,7 @@ void DFRobot_VL53L1X::startTemperatureUpdate()
     writeByteData(VL53L1_VHV_CONFIG__TIMEOUT_MACROP_LOOP_BOUND, 0x09);
     writeByteData(0x0B, 0);
 }
-
+*/
 void DFRobot_VL53L1X::calibrateOffset(uint16_t targetDistInMm)
 {
     int16_t offset = getOffset();
@@ -734,15 +737,19 @@ uint8_t DFRobot_VL53L1X::gesture(){
     dis = dis2 - dis1;
     delay(1);
     //Serial.println(dis);
-    if(dis < (-100)){
-        gestureStatus = 1;
+    if (dis1 < 400 && dis2 < 400){
+        if(dis < (-100)){
+            gestureStatus = 1;
+        }
+        else if(dis > 100){
+            gestureStatus = 2;
+        }
+        else{
+            gestureStatus = 0;
+        }
     }
-    else if(dis > 100){
-        gestureStatus = 2;
-    }
-    else{
+    else
         gestureStatus = 0;
-    }
     return gestureStatus;
 }
 

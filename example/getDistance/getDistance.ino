@@ -2,7 +2,8 @@
    file getDistance.ino
    SEN0302 Distance Ranging Sensor
    The module is connected with Arduino Uno to read the distance
-   This sensor output the distance between sensor and obstacles
+   This demo can be used to calibrate the sensor(both of offset and cross talk)
+   This demo output the distance between sensor and target
    Copyright    [DFRobot](http://www.dfrobot.com), 2016
    Copyright    GNU Lesser General Public License
    version  V0.1
@@ -24,12 +25,10 @@ void setup(void)
     Serial.println("Sensor init failed!");
     delay(1000);
   }
-  sensor.setOffset(30);
-  //sensor.calibrateOffset(200);
-  // sensor.setXTalk(400);
-  // sensor.calibrateXTalk(400);
-  
-  Serial.println(sensor.getI2CAddress());
+  sensor.setOffset(30);//This function apply the offset which found during calibration to the sensor
+  //sensor.calibrateOffset(200);//This function set a certain distance to finds the offset and applies the offset
+  //sensor.setXTalk(30);//This function apply the cross talk which found during calibration to the sensor
+  //sensor.calibrateXTalk(400);//This function set a certain distance to finds the cross talk and applies the cross talk
 }
 
 void loop(void)

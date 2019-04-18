@@ -22,14 +22,12 @@ Provide an Arduino library for the VL53L1X modules.
 ## Summary
 This is a library for the Arduino IDE, which can help Arduino to communicate with DFRobot_VL53L1X laser range sensor.<br>
 The library makes it easy to configure the sensor via I2C and read range data from the sensor.<br>
-This library is compatible with DFRobot_VL53L0X.<br>
 
 ## Feature
-1. Low standby current
-2. Serial input via I2C-bus
-3. Max sampling rate given by I2C-bus speed
-4. I2C address can be modified by modifying the macro definition
-5. Operating voltage range from 2.6 to 3.5V
+1. Serial input via I2C-bus
+2. Max sampling rate given by I2C-bus speed
+3. I2C address can be modified by modifying the macro definition
+4. Operating voltage range from 2.6 to 3.5V
 
 ## Installation
 
@@ -50,44 +48,6 @@ Download the library ZIP file and unzip it to the Arduino folder of the library.
 bool DFRobot_VL53L1X::begin();
 
 /*
- * @brief Set the I2C address
- *
- */
-void setI2CAddress(uint8_t addr);
-
-/*
- * @brief Gets the current I2C address
- *
- * @return The I2C address
- */
-int getI2CAddress();
-
-/*
- * @brief Sets interrupt polarity high
- *
- */
-void setInterruptPolarityHigh();
-
-/*
- * @brief Sets interrupt polarity low
- *
- */
-void setInterruptPolarityLow();
-
-/*
- * @brief Sets interrupt polarity(1 is high,0 is low)
- *
- */
-void setInterruptPolarity(uint8_t NewPolarity);
-
-/*
- * @brief Gets the interrupt polarity
- *
- * @return The interrupt polarity(1 is high,0 is low)
- */
-uint8_t getInterruptPolarity();
-
-/*
  * @brief enable range sensor
  *
  */
@@ -102,9 +62,15 @@ void stopRanging();
 /*
  * @brief Set timing budget in ms(20、33、50、100、200、500)
  *
+ * @param eTimingBudget eBudget1 = 20
+                        eBudget2 = 33
+                        eBudget3 = 50
+                        eBudget4 = 100
+                        eBudget5 = 200
+                        eBudget6 = 500
  */
 void setTimingBudgetInMs(uint16_t timingBudget);
-
+s
 /*
  * @brief Get timing budget in ms
  *
@@ -124,13 +90,6 @@ void setDistanceModeLong();
  * @return The detailed distance
  */
 void setDistanceModeShort();
-
-/*
- * @brief Set distance mode
- *
- * @param distance mode(long or short)
- */
-void setDistanceMode(uint16_t DM);
 
 /*
  * @brief Gets the distance mode
@@ -194,7 +153,7 @@ uint16_t getXTalk();
  *
  * @param ThreshLow(in mm) is the threshold under which the device raises an interrupt if window = 0
  *        ThreshHigh(in mm) is the threshold above which the device raises an interrupt if window = 1
- *        IntOnNoTarget is the window detection mode where 0 = below, 1 = above, 2 = out, and 3 = in
+ *        IntOnNoTarget is the window detection mode where 0 = eBelow, 1 = eAbove, 2 = eOut, and 3 = eIn
  */
 void setDistanceThreshold(uint16_t ThreshLow, uint16_t ThreshHigh, uint8_t Window);
 

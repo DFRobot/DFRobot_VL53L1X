@@ -1,12 +1,15 @@
 '''
 file getRangeCycle.py
-SEN0302 and SEN0245 Distance Ranging Sensor
+SEN0302 Distance Ranging Sensor
 The module is connected with RaspberryPi to read the distance
-This sensor output the distance between sensor and obstacles
-Copyright    [DFRobot](http://www.dfrobot.com), 2018
+
+This demo can set timing budget and inter measurement
+This demo output the distance between sensor and obstacles at the inter measurement that you set
+
+Copyright    [DFRobot](http://www.dfrobot.com), 2016
 Copyright    GNU Lesser General Public License
 version  V1.0
-date  2018-12-11
+date  2018-4-18
 '''
 
 import time
@@ -15,23 +18,24 @@ sys.path.append('../')
 from DFRobot_VL53L1X import VL53L1X
 
 sensor = VL53L1X(1) #VL53L1X begin
-sensor.setDistanceModeLong()
+sensor.set_distance_mode_long()
 '''
-The timing budget (TB) is the time required for the device to make one distance measurement
+The timing budget (TB) is the time the sensor needed to complete one distance measurement.
 TimingBudgetInMs = 20,33,50,100,200,500 ms
 '''
-sensor.setTimingBudgetInMs(20)
+sensor.set_timing_budget_in_ms(20)
 '''
 The intermeasurement period  must be greater than or equal to the timing budget
 '''
-sensor.setInterMeasurementInMs(50)
-print("InterMeasurement  : %.1f " % sensor.getInterMeasurementInMs())
-print("TimingBudget      : %.1f " % sensor.getTimingBudgetInMs())
+sensor.set_inter_measurement_in_ms(50)
+print("InterMeasurement  : %.f" % sensor.get_inter_measurement_in_ms())
+print("TimingBudget      : %.f" % sensor.get_timing_budget_in_ms())
 
 def main():
     while True:
-        print ("Distance   : %.2f " % sensor.getDistance())
-        print (" ")
+        while sensor.check_for_data_ready() == True:
+            print ("Distance   : %.f" % sensor.get_distance())
+            print (" ")
 
 if __name__ == "__main__":
     main()

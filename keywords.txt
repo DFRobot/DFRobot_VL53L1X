@@ -20,6 +20,7 @@ setInterruptPolarityLow	KEYWORD2
 setInterruptPolarity	KEYWORD2
 getInterruptPolarity	KEYWORD2
 startRanging	KEYWORD2
+stopRanging	KEYWORD2
 checkForDataReady	KEYWORD2
 setTimingBudgetInMs	KEYWORD2
 getTimingBudgetInMs	KEYWORD2
@@ -65,6 +66,16 @@ eVL53L1X_ok	LITERAL1
 eVL53L1X_InitError	LITERAL1
 eVL53L1X_WriteRegError	LITERAL1
 eVL53L1X_ReadRegError	LITERAL1
+eBelow	LITERAL1
+eAbove	LITERAL1
+eOut	LITERAL1
+eIn	LITERAL1
+eBudget1	LITERAL1
+eBudget2	LITERAL1
+eBudget3	LITERAL1
+eBudget4	LITERAL1
+eBudget5	LITERAL1
+eBudget6	LITERAL1
 #######################################
 
 
