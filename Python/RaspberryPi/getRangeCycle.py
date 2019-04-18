@@ -18,6 +18,10 @@ sys.path.append('../')
 from DFRobot_VL53L1X import VL53L1X
 
 sensor = VL53L1X(1) #VL53L1X begin
+
+while not sensor.begin():
+    time.sleep(1)
+
 sensor.set_distance_mode_long()
 '''
 The timing budget (TB) is the time the sensor needed to complete one distance measurement.

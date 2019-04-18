@@ -20,6 +20,10 @@ from DFRobot_VL53L1X import VL53L1X
 
 
 sensor = VL53L1X(1) #VL53L1X begin
+
+while not sensor.begin():
+    time.sleep(1)
+
 #sensor.setInterruptPolarityHigh()
 sensor.set_distance_mode_short()
 sensor.set_distance_threshold(300, 400, 1)#ThreshLow, ThreshHigh, Window(0 = below, 1 = above, 2 = out and 3 = in)
