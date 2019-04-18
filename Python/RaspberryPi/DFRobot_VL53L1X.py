@@ -131,17 +131,17 @@ class VL53L1X:
         rslt3 = self.read_byte_data(index + 2)
         rslt4 = self.read_byte_data(index + 3)
         return ((rslt1 << 24)| (rslt2 << 16)|(rslt3 << 8)| rslt4)
-
+    '''
     def set_i2c_address(self, address):
         self.write_byte_data(self.VL53L1_I2C_SLAVE__DEVICE_ADDRESS, address >> 1)
         _addr = address
 
     def get_i2c_address(self):
         return self._addr
-
+    '''
     def clear_interrupt(self):
         self.write_byte_data(self.SYSTEM__INTERRUPT_CLEAR, 0x01)
-
+    '''
     def set_interrupt_polarity_high(self):
         self.set_interrupt_polarity(1)
 
@@ -153,7 +153,7 @@ class VL53L1X:
         Temp = self.read_byte_data(self.GPIO_HV_MUX__CTRL)
         Temp = Temp & 0xEF
         self.write_byte_data(self.GPIO_HV_MUX__CTRL, Temp | (not(NewPolarity & 1)) << 4)
-
+    '''
     def get_interrupt_polarity(self):
         Temp = 0
         pInterruptPolarity = 0
@@ -165,7 +165,7 @@ class VL53L1X:
         pInterruptPolarity = not(Temp>>4)
         #print(pInterruptPolarity)
         return pInterruptPolarity
-        
+
     def start_ranging(self):
         self.write_byte_data(self.SYSTEM__MODE_START, 0x40)
 
@@ -322,20 +322,20 @@ class VL53L1X:
         ClockPLL = ClockPLL & 0x3FF
         pIM= pIM/(ClockPLL*1.065)
         return pIM
-
+    '''
     def boot_state(self):
         tmp = 0
     
         tmp = self.read_byte_data(self.VL53L1_FIRMWARE__SYSTEM_STATUS)
         return tmp
-
+    '''
     def get_distance(self):
         tmp = 0
   
         tmp = self.read_word_data(self.VL53L1_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0)
         self.clear_interrupt()
         return tmp
-
+    '''
     def get_signal_per_spad(self):
         SpNb = 1
         signal = 0
@@ -416,7 +416,7 @@ class VL53L1X:
             RgSt = 255
         rangeStatus = RgSt
         return rangeStatus
-
+    '''
     def set_offset(self, OffsetValue):
         Temp = (OffsetValue * 4)
         self.write_word_data(self.ALGO__PART_TO_PART_RANGE_OFFSET_MM, Temp)
@@ -479,7 +479,7 @@ class VL53L1X:
         tmp = self.read_word_data(self.SYSTEM__THRESH_HIGH)
         high = tmp
         return high
-
+    '''
     def set_ROI(uX, uY):
         OpticalCenter = 0
 
@@ -508,7 +508,7 @@ class VL53L1X:
         tmp = self.read_byte_data(self.ROI_CONFIG__USER_ROI_REQUESTED_GLOBAL_XY_SIZE)
         ROI_Y = ((tmp & 0xF0) >> 4) + 1
         return ROI_Y
-
+ 
     def set_signal_threshold(uSignal):
         self.write_word_data(self.RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS,Signal>>3)
 
@@ -546,7 +546,7 @@ class VL53L1X:
         self.stop_ranging()
         self.write_byte_data(self.VL53L1_VHV_CONFIG__TIMEOUT_MACROP_LOOP_BOUND, 0x09)
         self.write_byte_data(0x0B, 0)
-
+    '''
     def calibrate_offset(utargetDistInMm):
             offset = get_offset()
             i = 0
