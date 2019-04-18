@@ -74,7 +74,7 @@ void stopRanging();
                         eBudget6 = 500
  */
 void setTimingBudgetInMs(uint16_t timingBudget);
-s
+
 /*
  * @brief Get timing budget in ms
  *
