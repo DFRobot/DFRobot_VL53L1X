@@ -49,7 +49,7 @@ DFRobot_VL53L1X(TwoWire *pWire);
  * @return true if VL53L1X init succeed
  * @return false if VL53L1X init failed
  */
-bool DFRobot_VL53L1X::begin();
+bool begin();
 
 /*
  * @brief enable range sensor

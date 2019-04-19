@@ -25,10 +25,10 @@ void setup(void)
     Serial.println("Sensor init failed!");
     delay(1000);
   }
-  sensor.setOffset(30);//This function apply the offset which found during calibration to the sensor
-  //sensor.calibrateOffset(200);//This function set a certain distance to finds the offset and applies the offset
-  //sensor.setXTalk(30);//This function apply the cross talk which found during calibration to the sensor
-  //sensor.calibrateXTalk(400);//This function set a certain distance to finds the cross talk and applies the cross talk
+  sensor.setOffset(30);             //This function apply the offset which found during calibration to the sensor
+  //sensor.calibrateOffset(200);      //This function set a certain distance to finds the offset and applies the offset
+  //sensor.setXTalk(30);              //This function apply the cross talk which found during calibration to the sensor
+  //sensor.calibrateXTalk(400);       //This function set a certain distance to finds the cross talk and applies the cross talk
 }
 
 void loop(void)

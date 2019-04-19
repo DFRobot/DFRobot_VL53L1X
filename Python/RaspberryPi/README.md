@@ -43,6 +43,8 @@ $> python VL53L1X.py
 '''
 @brief Init The VL53L1X
 
+@param smbus Bus = 1
+
 '''
 VL53L1X(1)
 

@@ -2,7 +2,7 @@
 file gesture.py
 SEN0302 and SEN0245 Distance Ranging Sensor
 The module is connected with RaspberryPi to read the distance
-This sensor output the distance between sensor and obstacles
+This demo can get the 1D gesture(up and down)
 Copyright    [DFRobot](http://www.dfrobot.com), 2018
 Copyright    GNU Lesser General Public License
 version  V1.0
