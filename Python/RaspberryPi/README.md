@@ -3,7 +3,7 @@
 VL53L1X and VL53L0X are laser range sensors with three distance modes.<br>
 VL53L1X's measurement range can reach up to 4m.<br>
 
-## DFRobot_VL53L1X Library for RaspberryPi
+## DFRobot_VL53L1X Library for Raspberry Pi
 ---------------------------------------------------------
 Provide a Raspberry Pi library for the VL53L1X modules.
 
@@ -19,7 +19,7 @@ Provide a Raspberry Pi library for the VL53L1X modules.
 <content>
 
 ## Summary
-This is a library for the RaspBerryPi, which can help RaspBerryPi to communicate with DFRobot_VL53L1X laser range sensor.<br>
+This is a library for the Raspberry Pi, which can help Raspberry Pi to communicate with DFRobot_VL53L1X laser range sensor.<br>
 The library makes it easy to configure the sensor via I2C and read range data from the sensor.<br>
 
 ## Feature
@@ -29,7 +29,7 @@ The library makes it easy to configure the sensor via I2C and read range data fr
 
 ## Installation
 
-This Sensor should work with VL53L1X on RaspberryPi.<br>
+This Sensor should work with VL53L1X on Raspberry Pi.<br>
 Run the program:
 ```
 $> python VL53L1X.py
