@@ -19,11 +19,17 @@ sensor = VL53L1X(1) #VL53L1X begin
 
 while not sensor.begin():
     time.sleep(2)
-
-sensor.set_offset(30)           #This function apply the offset which found during calibration to the sensor
-#sensor.calibrate_offset(200)    #This function set a certain distance to finds the offset and applies the offset
+act_distance = 208
+#sensor.set_offset(30)           #This function apply the offset which found during calibration to the sensor
+sensor.calibrate_offset(act_distance)    #This function set a certain distance to finds the offset and applies the offset
 #sensor.set_x_talk(400)          #This function apply the cross talk which found during calibration to the sensor
-#sensor.calibrate_x_talk(400)    #This function set a certain distance to finds the cross talk and applies the cross talk
+sensor.calibrate_x_talk(act_distance)    #This function set a certain distance to finds the cross talk and applies the cross talk
+print("ActDistance(mm): %.2f " % act_distance)
+print(" ");
+print("Offset(mm): %.2f " %sensor.get_offset())
+print(" ");
+print("XTalk(cps): %.2f " %sensor.get_XTalk())
+print(" ");
 
 def main():
     while True:

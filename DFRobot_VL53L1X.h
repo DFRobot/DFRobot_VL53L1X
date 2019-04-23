@@ -63,20 +63,11 @@ enum eVL53L1X_Status{
 };
 
 typedef enum{
-    eBelow = 0,
-    eAbove = 1,
-    eOut = 2,
-    eIn = 3
+    eVL53L1X_Below = 0,
+    eVL53L1X_Above = 1,
+    eVL53L1X_Out = 2,
+    eVL53L1X_In = 3
 }eWindows;
-
-typedef enum {
-    eBudget1 = 20,
-    eBudget2 = 33,
-    eBudget3 = 50,
-    eBudget4 = 100,
-    eBudget5 = 200,
-    eBudget6 = 500
-}eTimingBudget;
 
 class DFRobot_VL53L1X
 {
@@ -86,13 +77,14 @@ class DFRobot_VL53L1X
         //VL53L1X_Version_t getSoftwareVersion();
         //void setI2CAddress(uint8_t addr);
         //int getI2CAddress();
-        //void setInterruptPolarityHigh();
-        //void setInterruptPolarityLow();
-        //void setInterruptPolarity(uint8_t NewPolarity);
+        void setInterruptPolarityHigh();
+        void setInterruptPolarityLow();
+        void setInterruptPolarity(uint8_t NewPolarity);
         void startRanging();
         void stopRanging();
-        void setTimingBudgetInMs(eTimingBudget timingBudget);
+        void setTimingBudgetInMs(uint16_t timingBudget);
         uint16_t getTimingBudgetInMs();
+        uint8_t getInterruptPolarity();
         bool checkForDataReady();
         void setDistanceModeLong();
         void setDistanceModeShort();
@@ -113,10 +105,10 @@ class DFRobot_VL53L1X
         //void setROI(uint16_t X, uint16_t Y);
         //void setSignalThreshold(uint16_t Signal);
         //uint16_t getSignalThreshold(); 
-        void calibrateOffset(uint16_t targetDistInMm);
-        void calibrateXTalk(uint16_t targetDistInMm);
+        int8_t calibrateOffset(uint16_t targetDistInMm);
+        int8_t calibrateXTalk(uint16_t targetDistInMm);
         void clearInterrupt();
-        uint8_t gesture();
+        //uint8_t gesture();
         eVL53L1X_Status lastOperateStatus;
     private:
         TwoWire *_pWire;
@@ -133,7 +125,6 @@ class DFRobot_VL53L1X
         void setSigmaThreshold(uint16_t Sigma);
         uint16_t getSigmaThreshold(); 
         void startTemperatureUpdate();
-        uint8_t getInterruptPolarity();
         void setDistanceMode(uint16_t DM);
         void writeByteData(uint16_t index, uint8_t data);
         void writeWordData(uint16_t index, uint16_t data);
@@ -148,6 +139,4 @@ class DFRobot_VL53L1X
         void i2CRead(uint16_t reg, uint8_t *pBuf, uint16_t len);
     
         uint8_t   addr = 0x29;
-        int16_t   dis1;
-        int16_t   dis2 = 0;
 };

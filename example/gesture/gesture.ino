@@ -16,6 +16,12 @@
 
 DFRobot_VL53L1X sensor(&Wire);
 
+float dis1 = 0;
+float dis2;
+uint16_t time;
+float speed;
+int i = 0;
+
 void setup(void)
 {
     Wire.begin();
@@ -26,26 +32,35 @@ void setup(void)
         Serial.println("Sensor init failed!");
         delay(1000);
     }
+    sensor.setDistanceModeShort();
+    sensor.setTimingBudgetInMs(eBudget_500ms);
+    sensor.setInterMeasurementInMs(500);
+    Serial.print("InterMeasurement:");
+    Serial.println(sensor.getInterMeasurementInMs());
+    Serial.print("TimingBudget:");
+    Serial.println(sensor.getTimingBudgetInMs());
+    time = sensor.getInterMeasurementInMs();
+    sensor.startRanging();
+    delay(100);
 }
 
 void loop(void)
 {
-    sensor.startRanging();
-    uint8_t gesStatus;
-    int i;
-    while(i < 1000 && sensor.getDistance() < 400){
-        gesStatus = sensor.gesture();
-        if(gesStatus == 1){
-            Serial.println("Current Gesture: DOWN");
-            delay(200);
-        } else if(gesStatus == 2){
-            Serial.println("Current Gesture: UP");
-            delay(200);
+    while (sensor.checkForDataReady() == true){
+        dis2 = dis1;
+        dis1 = sensor.getDistance();
+        speed = (dis1/time) - (dis2/time);
+        if(abs(speed) < 2){
+            if(speed > 0){
+                Serial.print("Target is go away ,   speed is ");
+                Serial.print(speed);
+                Serial.println(" m/s");
+            }else{
+                Serial.print("Target is get closed ,speed is ");
+                Serial.print(speed);
+                Serial.println(" m/s");
+            }
         }else
-            delay(200);
-        i++;
-        delay(200);
+            Serial.println("No target");
     }
-    sensor.stopRanging();
-    delay(200);
 }

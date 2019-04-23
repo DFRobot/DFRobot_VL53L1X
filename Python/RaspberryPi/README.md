@@ -1,7 +1,10 @@
 # VL53L1X
 
-VL53L1X and VL53L0X are laser range sensors with three distance modes.<br>
-VL53L1X's measurement range can reach up to 4m.<br>
+The VL53L1X is a state-of-the-art, Time-of-Flight (ToF), laser-ranging sensor<br>
+It is the fastest miniature ToF sensor on the market with accurate ranging up to 4 m and fast ranging frequency up to 50 Hz<br>
+Housed in a miniature and reflowable package, it integrates a SPAD receiving array, a 940 nm invisible Class1 laser emitter, physical infrared filters<br>
+and optics to achieve the best ranging performance in various ambient lighting conditions with a range of cover window options<br>
+Unlike conventional IR sensors, the VL53L1X uses ST’s latest generation ToF technology which allows absolute distance measurement whatever the target color and reflectance<br>
 
 ## DFRobot_VL53L1X Library for RaspberryPi
 ---------------------------------------------------------
@@ -57,22 +60,23 @@ VL53L1X(1)
 def begin(self)
 
 '''
-@brief enable range sensor
+@brief This function starts the ranging distance operation which is continuous
 '''
 def startRanging(self)
 
 '''
-@brief disable range sensor
+@brief This function stops the ranging
 '''
 def stopRanging(self)
 
 '''
-@brief Set timing budget in ms(20,33,50,100,200,500)
+@brief This function programs the timing budget in ms
+       The predefined values are 20, 50, 100, 200, and 500
 '''
 def setTimingBudgetInMs(self, timingBudget)
 
 '''
-@brief Get timing budget in ms
+@brief This function returns the current timing budget in ms
 
 @return timing budget
 '''
@@ -80,13 +84,14 @@ def getTimingBudgetInMs(self)
 
 '''
 @brief Set long distance mode
+       Long mode can range up to 4 m in the dark with a timing budget of 200 ms
 '''
 def setDistanceModeLong(self)
 
 '''
 @brief Set short distance mode
+       Short mode maximum distance is limited to 2.2m
 
-@return The detailed distance
 '''
 def setDistanceModeShort(self)
 
@@ -98,28 +103,28 @@ def setDistanceModeShort(self)
 def getDistanceMode(self)
 
 '''
-@brief Set inter measurement in ms
+@brief This function programs the intermeasurement period (IMP) in ms
 
-@param interMeasurement must be greater than or equal to the timing budget
+@param InterMeasurement must be greater than or equal to the timing budget
 '''
 def setInterMeasurementInMs(self, interMeasurement)
 
 '''
-@brief Get inter measurement in ms
+@brief This function returns the intermeasurement period in ms
 
-@return inter measurement
+@return The intermeasurement period in ms
 '''
 def getInterMeasurementInMs(self)
 
 '''
-@brief Gets the distansce
+@brief This function returns the distance measured by the sensor in mm
 
 @return The detailed distance
 '''
 def getDistance(self) 
 
 '''
-@brief Set offset calibration
+@brief The function applies the offset value in millimeters to the sensor
 
 @param The detailed offset value(depends on sensor works)
 '''
@@ -128,7 +133,8 @@ def setOffset(self, OffsetValue);
 '''
 @brief Set Xtalk calibration
 
-@param The detailed Xtalk value(depends on sensor works)
+@param The user may use this function to apply, to the sensor
+       The offset found during calibration which is stored in the host system
 '''
 def setXTalk(self, XtalkValue);
 
@@ -142,35 +148,36 @@ def setXTalk(self, XtalkValue);
 def setDistanceThreshold(self, ThreshLow, ThreshHigh, Window)
 
 '''
-@brief Gets distance threshold window
+@brief This function returns the window detection mode where 0 = below, 1 = above, 2 = out and 3 = in
 
 @return The threshold window:0 = below, 1 = above, 2 = out, and 3 = in
 '''
 def getDistanceThresholdWindow(self);
 
 '''
-@brief Gets distance threshold low
+@brief This function returns the low threshold in mm
 
 @return The distance threshold low
 '''
 def getDistanceThresholdLow(self)
 
 '''
-@brief Gets distance threshold high
+@brief This function returns the high threshold in mm
 
 @return The distance threshold high
 '''
 def getDistanceThresholdHigh(self)
 
 '''
-@brief Sets calibrate offset
+@brief This function finds the offset and applies the offset
+       The offset correction value must be stored in the host system
 
 @param The target distance in mm
 '''
 def calibrateOffset(self, targetDistInMm)
 
 '''
-@brief Sets calibrate XTalk
+@brief This function finds the crosstalk compensation value and applies the correction
 
 @return The target distance in mm
 '''

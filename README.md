@@ -1,8 +1,11 @@
 # VL53L1X
 
 
-VL53L1X is laser range sensors with three distance modes.<br>
-VL53L1X's measurement range can reach up to 4m.<br>
+The VL53L1X is a state-of-the-art, Time-of-Flight (ToF), laser-ranging sensor<br>
+It is the fastest miniature ToF sensor on the market with accurate ranging up to 4 m and fast ranging frequency up to 50 Hz<br>
+Housed in a miniature and reflowable package, it integrates a SPAD receiving array, a 940 nm invisible Class1 laser emitter, physical infrared filters<br>
+and optics to achieve the best ranging performance in various ambient lighting conditions with a range of cover window options<br>
+Unlike conventional IR sensors, the VL53L1X uses ST’s latest generation ToF technology which allows absolute distance measurement whatever the target color and reflectance<br>
 
 ## DFRobot_VL53L1X Library for Arduino
 ---------------------------------------------------------
@@ -52,31 +55,26 @@ DFRobot_VL53L1X(TwoWire *pWire);
 bool begin();
 
 /*
- * @brief enable range sensor
- *
+ * @brief This function starts the ranging distance operation which is continuous
  */
 void startRanging();
 
 /*
- * @brief disable range sensor
+ * @brief This function stops the ranging
  *
  */
 void stopRanging();
 
 /*
- * @brief Set timing budget in ms(20、33、50、100、200、500)
+ * @brief This function programs the timing budget in ms
+ *        The predefined values are 20, 50, 100, 200, and 500
  *
- * @param eTimingBudget eBudget1 = 20
-                        eBudget2 = 33
-                        eBudget3 = 50
-                        eBudget4 = 100
-                        eBudget5 = 200
-                        eBudget6 = 500
+ * @param timingBudget = 20ms,33ms,50ms,100ms,200ms,500ms
  */
 void setTimingBudgetInMs(uint16_t timingBudget);
 
 /*
- * @brief Get timing budget in ms
+ * @brief This function returns the current timing budget in ms.
  *
  * @return timing budget
  */
@@ -84,33 +82,32 @@ uint16_t getTimingBudgetInMs();
 
 /*
  * @brief Set long distance mode
- *
+ *        Long mode can range up to 4 m in the dark with a timing budget of 200 ms
  */
 void setDistanceModeLong();
 
 /*
  * @brief Set short distance mode
- *
- * @return The detailed distance
+ *        Short mode maximum distance is limited to 2.2m
  */
 void setDistanceModeShort();
 
 /*
- * @brief Set inter measurement in ms
+ * @brief This function programs the intermeasurement period (IMP) in ms
  *
- * @param interMeasurement must be greater than or equal to the timing budget
+ * @param InterMeasurement must be greater than or equal to the timing budget
  */
 void setInterMeasurementInMs(uint16_t interMeasurement);
 
 /*
- * @brief Get inter measurement in ms
+ * @brief This function returns the intermeasurement period in ms
  *
- * @return inter measurement
+ * @return The intermeasurement period in ms
  */
 uint16_t getInterMeasurementInMs();
 
 /*
- * @brief Gets the distansce
+ * @brief This function returns the distance measured by the sensor in mm
  *
  * @return The detailed distance
  */
@@ -118,28 +115,35 @@ uint16_t getDistance();
 
 
 /*
- * @brief Set offset calibration
+ * @brief The function applies the offset value in millimeters to the sensor
  *
- * @param The detailed offset value(depends on sensor works)
+ * @param The user may use this function to apply, to the sensor
+ *        The offset found during calibration which is stored in the host system
+ *        OffsetValue = targetDistance - sensorDistance
+ *
  */
 void setOffset(int16_t OffsetValue);
 
 /*
- * @brief Get offset calibration
+ * @brief The function returns the current offset correction applied to the sensor
  *
  * @return The detailed offset value
  */
 int16_t getOffset();
 
 /*
- * @brief Set Xtalk calibration
+ * @brief The function applies the crosstalk value, in cps, to the sensor
  *
- * @param The detailed Xtalk value(depends on sensor works)
+ * @param The user may use this function to apply, to the sensor
+ *        The crosstalk correction found during calibration and stored in the host system
+ *        XtalkValue = 512*(SignalRate*(1-(Distance/targetDistance)))/SpadNb
+ *
  */
 void setXTalk(uint16_t XtalkValue);
 
 /*
- * @brief Get Xtalk calibration
+ * @brief The function returns the current crosstalk value programmed in the sensor
+ *        Zero means there is no crosstalk compensation. The unit is cps (counts per second).
  *
  * @return The detailed Xtalk value
  */
@@ -150,40 +154,41 @@ uint16_t getXTalk();
  *
  * @param ThreshLow(in mm) is the threshold under which the device raises an interrupt if window = 0
  *        ThreshHigh(in mm) is the threshold above which the device raises an interrupt if window = 1
- *        IntOnNoTarget is the window detection mode where 0 = eBelow, 1 = eAbove, 2 = eOut, and 3 = eIn
+ *        IntOnNoTarget is the window detection mode where 0 = eVL53L1X_Below, 1 = eVL53L1X_Above, 2 = eVL53L1X_Out, and 3 = eVL53L1X_In
  */
 void setDistanceThreshold(uint16_t ThreshLow, uint16_t ThreshHigh, uint8_t Window);
 
 /*
- * @brief Gets distance threshold window
+ * @brief This function returns the window detection mode where 0 = below, 1 = above, 2 = out and 3 = in
  *
  * @return The threshold window:0 = below, 1 = above, 2 = out, and 3 = in
  */
 uint16_t getDistanceThresholdWindow();
 
 /*
- * @brief Gets distance threshold low
+ * @brief This function returns the low threshold in mm
  *
- * @return The distance threshold low
+ * @return The distance low threshold 
  */
 uint16_t getDistanceThresholdLow();
 
 /*
- * @brief Gets distance threshold high
+ * @brief This function returns the high threshold in mm
  *
- * @return The distance threshold high
+ * @return The distance high threshold
  */
 uint16_t getDistanceThresholdHigh(); 
 
 /*
- * @brief Sets calibrate offset
+ * @brief This function finds the offset and applies the offset
+ *        The offset correction value must be stored in the host system
  *
  * @param The target distance in mm
  */
 void calibrateOffset(uint16_t targetDistInMm);
 
 /*
- * @brief Sets calibrate XTalk
+ * @brief This function finds the crosstalk compensation value and applies the correction
  *
  * @return The target distance in mm
  */

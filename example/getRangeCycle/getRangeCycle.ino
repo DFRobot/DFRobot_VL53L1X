@@ -27,14 +27,14 @@ void setup(void)
   }
   sensor.setDistanceModeShort();
   /*The timing budget (TB) is the time the sensor needed to complete one distance measurement*/
-  /*TimingBudgetInMs = eBudget1 = 20ms
-                       eBudget2 = 33ms
-                       eBudget3 = 50ms
-                       eBudget4 = 100ms
-                       eBudget5 = 200ms
-                       eBudget6 = 500ms
+  /*TimingBudgetInMs = eBudget_20ms  = 20ms
+                       eBudget_33ms  = 33ms
+                       eBudget_50ms  = 50ms
+                       eBudget_100ms = 100ms
+                       eBudget_200ms = 200ms
+                       eBudget_500ms = 500ms
    */
-  sensor.setTimingBudgetInMs(eBudget1);
+  sensor.setTimingBudgetInMs(eBudget_20ms);
   /* The intermeasurement period  must be greater than or equal to the timing budget*/
   sensor.setInterMeasurementInMs(20);
   Serial.print("InterMeasurement:");

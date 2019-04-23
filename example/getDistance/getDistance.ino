@@ -7,13 +7,14 @@
    Copyright    [DFRobot](http://www.dfrobot.com), 2016
    Copyright    GNU Lesser General Public License
    version  V0.1
-   date  2018-12-28
+   date  2019-4-22
 */
 #include "Arduino.h"
 #include "Wire.h"
-#include "DFRobot_VL53L1X.h"
+#include "DFRobot_VL53L1X.h" 
 
 DFRobot_VL53L1X sensor(&Wire);
+uint16_t actDistance;
 
 void setup(void)
 {
@@ -25,10 +26,23 @@ void setup(void)
     Serial.println("Sensor init failed!");
     delay(1000);
   }
-  sensor.setOffset(30);             //This function apply the offset which found during calibration to the sensor
-  //sensor.calibrateOffset(200);      //This function set a certain distance to finds the offset and applies the offset
-  //sensor.setXTalk(30);              //This function apply the cross talk which found during calibration to the sensor
-  //sensor.calibrateXTalk(400);       //This function set a certain distance to finds the cross talk and applies the cross talk
+  
+  actDistance = 208;
+  
+  //sensor.setOffset(20);             //This function apply the offset which found during calibration to the sensor
+  sensor.calibrateOffset(actDistance); //This function set a certain distance to finds the offset and applies the offset
+  
+  //sensor.setXTalk(3);              //This function apply the cross talk which found during calibration to the sensor
+  sensor.calibrateXTalk(actDistance);       //This function set a certain distance to finds the cross talk and applies the cross talk
+  Serial.print("ActDistance(mm): ");
+  Serial.println(actDistance);
+  Serial.println();
+  Serial.print("Offset(mm): ");
+  Serial.println(sensor.getOffset());
+  Serial.println();
+  Serial.print("XTalk(cps): ");
+  Serial.println(sensor.getXTalk());
+  Serial.println();
 }
 
 void loop(void)
