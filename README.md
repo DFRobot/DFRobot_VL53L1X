@@ -76,7 +76,7 @@ void stopRanging();
  *                      eBudget_200ms = 200
  *                      eBudget_500ms = 500
  */
-void setTimingBudgetInMs(uint16_t timingBudget);
+void setTimingBudgetInMs(eTimingBudget timingBudget);
 
 /*
  * @brief This function returns the current timing budget in ms.
