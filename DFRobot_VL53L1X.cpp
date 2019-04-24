@@ -549,12 +549,12 @@ void DFRobot_VL53L1X::setDistanceThreshold(uint16_t ThreshLow, uint16_t ThreshHi
     writeWordData(SYSTEM__THRESH_LOW, ThreshLow);
 }
 
-uint16_t DFRobot_VL53L1X::getDistanceThresholdWindow()
+eWindows DFRobot_VL53L1X::getDistanceThresholdWindow()
 {
-    uint16_t window;
+    eWindows window;
     uint8_t tmp;
     readByteData(SYSTEM__INTERRUPT_CONFIG_GPIO, &tmp);
-    window = (uint16_t)(tmp & 0x7);
+    window = (eWindows)(tmp & 0x7);
     return window;
 }
 uint16_t DFRobot_VL53L1X::getDistanceThresholdLow()

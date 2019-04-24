@@ -83,7 +83,7 @@ void setTimingBudgetInMs(eTimingBudget timingBudget);
  *
  * @return timing budget
  */
-uint16_t getTimingBudgetInMs();
+eTimingBudget getTimingBudgetInMs();
 
 /*
  * @brief Set long distance mode
@@ -166,9 +166,9 @@ void setDistanceThreshold(uint16_t ThreshLow, uint16_t ThreshHigh, eWindows Wind
 /*
  * @brief This function returns the window detection mode where 0 = below, 1 = above, 2 = out and 3 = in
  *
- * @return The threshold window:0 = below, 1 = above, 2 = out, and 3 = in
+ * @return The threshold window:0 = eVL53L1X_Below, 1 = eVL53L1X_Above, 2 = eVL53L1X_Out, and 3 = eVL53L1X_In
  */
-uint16_t getDistanceThresholdWindow();
+eWindows getDistanceThresholdWindow();
 
 /*
  * @brief This function returns the low threshold in mm
@@ -199,10 +199,6 @@ void calibrateOffset(uint16_t targetDistInMm);
  */
 void calibrateXTalk(uint16_t targetDistInMm);
 
-/*
- * @brief 1D gesture
- */
-uint8_t gesture();
 
 /*
  * @brief 1D eVL53L1X_ok            for ok 
@@ -221,7 +217,7 @@ MCU                | Work Well | Work Wrong | Untested  | Remarks
 ------------------ | :----------: | :----------: | :---------: | -----
 Arduino uno |       √      |             |            | 
 RaspberryPi |       √      |             |            | 
-
+Firebeetle  |       √      |             |            | 
 
 ## Credits
 

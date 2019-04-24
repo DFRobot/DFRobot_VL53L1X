@@ -108,7 +108,7 @@ class DFRobot_VL53L1X
         void setXTalk(uint16_t XtalkValue);
         uint16_t getXTalk(); 
         void setDistanceThreshold(uint16_t ThreshLow, uint16_t ThreshHigh, eWindows Window);
-        uint16_t getDistanceThresholdWindow();
+        eWindows getDistanceThresholdWindow();
         uint16_t getDistanceThresholdLow();
         uint16_t getDistanceThresholdHigh(); 
         //void setROI(uint16_t X, uint16_t Y);
