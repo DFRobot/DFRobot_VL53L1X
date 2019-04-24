@@ -161,7 +161,7 @@ uint16_t getXTalk();
  *        ThreshHigh(in mm) is the threshold above which the device raises an interrupt if window = 1
  *        IntOnNoTarget is the window detection mode where 0 = eVL53L1X_Below, 1 = eVL53L1X_Above, 2 = eVL53L1X_Out, and 3 = eVL53L1X_In
  */
-void setDistanceThreshold(uint16_t ThreshLow, uint16_t ThreshHigh, uint8_t Window);
+void setDistanceThreshold(uint16_t ThreshLow, uint16_t ThreshHigh, eWindows Window);
 
 /*
  * @brief This function returns the window detection mode where 0 = below, 1 = above, 2 = out and 3 = in
