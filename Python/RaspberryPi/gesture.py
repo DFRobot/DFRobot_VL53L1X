@@ -1,12 +1,12 @@
 '''
 file gesture.py
-SEN0302 and SEN0245 Distance Ranging Sensor
+SEN0302 Distance Ranging Sensor
 The module is connected with RaspberryPi to read the distance
-This demo can get the 1D gesture(up and down)
-Copyright    [DFRobot](http://www.dfrobot.com), 2018
+This demo can get the 1D gesture(get closed and go away),then get the speed of target
+Copyright    [DFRobot](http://www.dfrobot.com), 2016
 Copyright    GNU Lesser General Public License
 version  V1.0
-date  2018-12-11
+date  2019-4-24
 '''
 
 import time

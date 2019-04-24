@@ -69,7 +69,12 @@ void stopRanging();
  * @brief This function programs the timing budget in ms
  *        The predefined values are 20, 50, 100, 200, and 500
  *
- * @param timingBudget = 20ms,33ms,50ms,100ms,200ms,500ms
+ * @param eTimingBudget eBudget_20ms = 20
+ *                      eBudget_33ms = 33
+ *                      eBudget_50ms = 50
+ *                      eBudget_100ms = 100
+ *                      eBudget_200ms = 200
+ *                      eBudget_500ms = 500
  */
 void setTimingBudgetInMs(uint16_t timingBudget);
 

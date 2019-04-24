@@ -127,6 +127,7 @@ def getDistance(self)
 @brief The function applies the offset value in millimeters to the sensor
 
 @param The detailed offset value(depends on sensor works)
+       OffsetValue = targetDistance - sensorDistance
 '''
 def setOffset(self, OffsetValue);
 
@@ -135,6 +136,7 @@ def setOffset(self, OffsetValue);
 
 @param The user may use this function to apply, to the sensor
        The offset found during calibration which is stored in the host system
+       XtalkValue = 512*(SignalRate*(1-(Distance/targetDistance)))/SpadNb
 '''
 def setXTalk(self, XtalkValue);
 

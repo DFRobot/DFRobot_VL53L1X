@@ -196,7 +196,7 @@ bool DFRobot_VL53L1X::checkForDataReady()
         return  0;
 }
 
-void DFRobot_VL53L1X::setTimingBudgetInMs(uint16_t timingBudget)
+void DFRobot_VL53L1X::setTimingBudgetInMs(eTimingBudget timingBudget)
 {
     uint16_t DM;
 
@@ -268,42 +268,39 @@ void DFRobot_VL53L1X::setTimingBudgetInMs(uint16_t timingBudget)
     }
 }
 
-uint16_t DFRobot_VL53L1X::getTimingBudgetInMs()
+eTimingBudget DFRobot_VL53L1X::getTimingBudgetInMs()
 {
     uint16_t Temp;
-    uint16_t pTimingBudget;
+    eTimingBudget pTimingBudget;
 
     readWordData(RANGE_CONFIG__TIMEOUT_MACROP_A_HI, &Temp);
     switch (Temp) {
-        case 0x001D :
-            pTimingBudget = 15;
-            break;
         case 0x0051 :
         case 0x001E :
-            pTimingBudget = 20;
+            pTimingBudget = eBudget_20ms;
             break;
         case 0x00D6 :
         case 0x0060 :
-            pTimingBudget = 33;
+            pTimingBudget = eBudget_33ms;
             break;
         case 0x1AE :
         case 0x00AD :
-            pTimingBudget = 50;
+            pTimingBudget = eBudget_50ms;
             break;
         case 0x02E1 :
         case 0x01CC :
-            pTimingBudget = 100;
+            pTimingBudget = eBudget_100ms;
             break;
         case 0x03E1 :
         case 0x02D9 :
-            pTimingBudget = 200;
+            pTimingBudget = eBudget_200ms;
             break;
         case 0x0591 :
         case 0x048F :
-            pTimingBudget = 500;
+            pTimingBudget = eBudget_500ms;
             break;
         default:
-            pTimingBudget = 0;
+            pTimingBudget = eBudget_20ms;
             break;
     }
     return pTimingBudget;
@@ -321,7 +318,7 @@ void DFRobot_VL53L1X::setDistanceModeShort()
 
 void DFRobot_VL53L1X::setDistanceMode(uint16_t DM)
 {
-    uint16_t TB;
+    eTimingBudget TB;
 
     TB = getTimingBudgetInMs();
     switch (DM) {

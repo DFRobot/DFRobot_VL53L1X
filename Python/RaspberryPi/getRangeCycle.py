@@ -9,7 +9,7 @@ This demo output the distance between sensor and obstacles at the inter measurem
 Copyright    [DFRobot](http://www.dfrobot.com), 2016
 Copyright    GNU Lesser General Public License
 version  V1.0
-date  2018-4-18
+date  2019-4-18
 '''
 
 import time

@@ -69,6 +69,15 @@ typedef enum{
     eVL53L1X_In = 3
 }eWindows;
 
+typedef enum {
+    eBudget_20ms = 20,
+    eBudget_33ms = 33,
+    eBudget_50ms = 50,
+    eBudget_100ms = 100,
+    eBudget_200ms = 200,
+    eBudget_500ms = 500
+}eTimingBudget;
+
 class DFRobot_VL53L1X
 {
     public:
@@ -82,8 +91,8 @@ class DFRobot_VL53L1X
         void setInterruptPolarity(uint8_t NewPolarity);
         void startRanging();
         void stopRanging();
-        void setTimingBudgetInMs(uint16_t timingBudget);
-        uint16_t getTimingBudgetInMs();
+        void setTimingBudgetInMs(eTimingBudget timingBudget);
+        eTimingBudget getTimingBudgetInMs();
         uint8_t getInterruptPolarity();
         bool checkForDataReady();
         void setDistanceModeLong();

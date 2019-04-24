@@ -28,18 +28,16 @@ void setup(void)
   }
   
   actDistance = 208;
+  Serial.print("ActDistance(mm): ");
+  Serial.println(actDistance);
   
   //sensor.setOffset(20);             //This function apply the offset which found during calibration to the sensor
   sensor.calibrateOffset(actDistance); //This function set a certain distance to finds the offset and applies the offset
-  
-  //sensor.setXTalk(3);              //This function apply the cross talk which found during calibration to the sensor
-  sensor.calibrateXTalk(actDistance);       //This function set a certain distance to finds the cross talk and applies the cross talk
-  Serial.print("ActDistance(mm): ");
-  Serial.println(actDistance);
-  Serial.println();
   Serial.print("Offset(mm): ");
   Serial.println(sensor.getOffset());
-  Serial.println();
+  
+  //sensor.setXTalk(0);              //This function apply the cross talk which found during calibration to the sensor
+  sensor.calibrateXTalk(actDistance);       //This function set a certain distance to finds the cross talk and applies the cross talk
   Serial.print("XTalk(cps): ");
   Serial.println(sensor.getXTalk());
   Serial.println();
