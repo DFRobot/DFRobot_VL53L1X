@@ -52,7 +52,7 @@ $> python VL53L1X.py
 VL53L1X(1)
 
 '''
-@brief To judge which one is being used 
+@brief Init sensor and check the data is ready
 
 @return true if VL53L1X init succeed
 @return false if VL53L1X init failed

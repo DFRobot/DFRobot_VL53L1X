@@ -47,7 +47,7 @@ Download the library ZIP file and unzip it to the Arduino folder of the library.
 DFRobot_VL53L1X(TwoWire *pWire);
 
 /* 
- * @brief To judge which one is being used 
+ * @brief Init sensor and check the data is ready
  *
  * @return true if VL53L1X init succeed
  * @return false if VL53L1X init failed
