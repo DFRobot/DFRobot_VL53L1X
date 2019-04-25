@@ -28,7 +28,7 @@ void setup(void)
     Serial.println("Sensor init failed!");
     delay(1000);
   }
-  attachInterrupt(0, interrupt, RISING);
+  attachInterrupt(0, interrupt, RISING);//Pin of interrupt is digital PIN2
   
   /*ThreshLow(in mm) is the threshold under which the device raises an interrupt if window = 0,less than ThreshHigh*/
   /*ThreshHigh(in mm) is the threshold above which the device raises an interrupt if window = 1,less than measuring range */
