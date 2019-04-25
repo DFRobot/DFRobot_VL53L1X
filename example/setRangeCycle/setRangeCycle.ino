@@ -1,5 +1,5 @@
 /*!
-   file getRangeCycle.ino
+   file setRangeCycle.ino
    SEN0302 Distance Ranging Sensor
    The module is connected with Arduino Uno to read the distance
    This demo can set timing budget and inter measurement
@@ -37,10 +37,12 @@ void setup(void)
   sensor.setTimingBudgetInMs(eBudget_20ms);
   /* The intermeasurement period  must be greater than or equal to the timing budget*/
   sensor.setInterMeasurementInMs(20);
-  Serial.print("InterMeasurement:");
+  Serial.print("InterMeasurement(ms):");
   Serial.println(sensor.getInterMeasurementInMs());
-  Serial.print("TimingBudget:");
+  Serial.print("TimingBudget(ms):    ");
   Serial.println(sensor.getTimingBudgetInMs());
+  Serial.println();
+  
   sensor.startRanging();
 }
 

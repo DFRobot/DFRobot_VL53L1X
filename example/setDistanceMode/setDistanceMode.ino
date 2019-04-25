@@ -1,5 +1,5 @@
 /*!
-   file getDistance.ino
+   file setDistance.ino
    SEN0302 SEN0245 Distance Ranging Sensor
    The module is connected with Arduino Uno to read the distance
    This demo can set distance mode(short for 2m, long for 4m)

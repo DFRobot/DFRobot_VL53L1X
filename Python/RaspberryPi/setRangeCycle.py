@@ -1,5 +1,5 @@
 '''
-file getRangeCycle.py
+file setRangeCycle.py
 SEN0302 Distance Ranging Sensor
 The module is connected with RaspberryPi to read the distance
 
@@ -22,7 +22,7 @@ sensor = VL53L1X(1) #VL53L1X begin
 while not sensor.begin():
     time.sleep(1)
 
-sensor.set_distance_mode_long()
+sensor.set_distance_mode_short()
 '''
 The timing budget (TB) is the time the sensor needed to complete one distance measurement.
 TimingBudgetInMs = 20,33,50,100,200,500 ms
@@ -32,8 +32,9 @@ sensor.set_timing_budget_in_ms(20)
 The intermeasurement period  must be greater than or equal to the timing budget
 '''
 sensor.set_inter_measurement_in_ms(50)
-print("InterMeasurement  : %.f" % sensor.get_inter_measurement_in_ms())
-print("TimingBudget      : %.f" % sensor.get_timing_budget_in_ms())
+print("InterMeasurement(ms): %.f" % sensor.get_inter_measurement_in_ms())
+print("TimingBudget(ms)    : %.f" % sensor.get_timing_budget_in_ms())
+print(" ")
 
 def main():
     while True:
