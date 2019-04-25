@@ -1,5 +1,5 @@
 '''
-file velocity.py
+file speedMeasure.py
 SEN0302 Distance Ranging Sensor
 The module is connected with RaspberryPi to read the distance
 This demo can get the 1D gesture(get closed and go away),then get the speed of target

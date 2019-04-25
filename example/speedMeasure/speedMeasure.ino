@@ -1,5 +1,5 @@
 /*!
-   file velocity.ino
+   file speedMeasure.ino
    SEN0302 Distance Ranging Sensor
    The module is connected with Arduino Uno to read the distance
    This demo can get the 1D gesture(up and down)
