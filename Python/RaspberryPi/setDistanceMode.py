@@ -27,9 +27,9 @@ while not sensor.begin():
 #sensor.setInterruptPolarityHigh()
 sensor.set_distance_mode_short()
 sensor.set_distance_threshold(300, 400, 1)#ThreshLow, ThreshHigh, Window(0 = below, 1 = above, 2 = out and 3 = in)
-print(sensor.get_distance_threshold_window())#0 = below, 1 = above, 2 = out and 3 = in
-print(sensor.get_distance_threshold_low())
-print(sensor.get_distance_threshold_high())
+print("ThresholdWindow    :%.f" % sensor.get_distance_threshold_window())#0 = below, 1 = above, 2 = out and 3 = in
+print("ThresholdLow(mm)   :%.f" % sensor.get_distance_threshold_low())
+print("ThresholdHigh(mm)  :%.f" % sensor.get_distance_threshold_high())
 #sensor.check_for_data_ready()
 #sensor.set_distance_mode_long()
 sensor.start_ranging()
@@ -65,7 +65,7 @@ def main():
             IO1Lock.acquire() # wait io1 release
             IO1Flag = False
             IO1Lock.release()
-            print ("Distance   :%.f" % sensor.get_distance())
+            print ("Distance(mm)   :%.f" % sensor.get_distance())
             time.sleep(0.1)
         time.sleep(0.1)
 

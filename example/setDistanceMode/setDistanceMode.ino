@@ -34,11 +34,11 @@ void setup(void)
   /*ThreshHigh(in mm) is the threshold above which the device raises an interrupt if window = 1,less than measuring range */
   /*Window(0 = eVL53L1X_Below, 1 = eVL53L1X_Above, 2 = eVL53L1X_Out and 3 = eVL53L1X_In)*/
   sensor.setDistanceThreshold(200, 300, eVL53L1X_Below);
-  Serial.print("ThresholdWindow: ");
+  Serial.print("ThresholdWindow:   ");
   Serial.println(sensor.getDistanceThresholdWindow());
-  Serial.print("ThresholdLow:    ");
+  Serial.print("ThresholdLow(mm):  ");
   Serial.println(sensor.getDistanceThresholdLow());
-  Serial.print("ThresholdHigh:   ");
+  Serial.print("ThresholdHigh(mm): ");
   Serial.println(sensor.getDistanceThresholdHigh());
   sensor.setDistanceModeShort();//Measuring range is about 2m
   //sensor.setDistanceModeLong();//Measuring range is about 4m
