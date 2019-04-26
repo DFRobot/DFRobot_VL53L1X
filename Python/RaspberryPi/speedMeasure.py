@@ -17,20 +17,28 @@ from DFRobot_VL53L1X import VL53L1X
 sensor = VL53L1X(1) #VL53L1X begin
 while not sensor.begin():
     time.sleep(1)
+sensor.set_distance_mode_short();
+sensor.set_timing_budget_in_ms(500);
+sensor.set_inter_measurement_in_ms(500);
+print("InterMeasurement: %.f" % sensor.get_inter_measurement_in_ms())
+print("TimingBudget:     %.f" % sensor.get_timing_budget_in_ms())
+time = sensor.get_inter_measurement_in_ms();
+sensor.start_ranging();
 
 dis1 = 0
 
 def main():
     while True:
+        global dis1
         while sensor.check_for_data_ready() == True:
             dis2 = dis1;
             dis1 = sensor.get_distance()
             speed = (dis1/time) - (dis2/time)
             if(abs(speed) < 2):
                 if speed > 0:
-                    print("Target is go away ,   speed is %.f" % speed " m/s")
+                    print("Target is go away ,   speed( m/s) is %.3f" % speed)
                 else:
-                    print("Target is get closed ,speed is %.f" % speed " m/s")
+                    print("Target is get closed ,speed( m/s) is %.3f" % speed)
                 
             else:
                 print("No target")

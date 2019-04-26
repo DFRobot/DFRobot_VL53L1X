@@ -349,7 +349,7 @@ class VL53L1X:
         SpNb = self.read_word_data(self.VL53L1_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0)
         ambPerSp=2000.0 * AmbientRate / SpNb
         return ambPerSp
-
+'''
 
     def get_signa_rate(self):
         tmp = 0
@@ -358,7 +358,7 @@ class VL53L1X:
         tmp = tmp * 8
         return tmp
 
-
+    '''
     def get_spad_nb(self):
         tmp = 0
     
@@ -411,6 +411,7 @@ class VL53L1X:
         rangeStatus = RgSt
         return rangeStatus
     '''
+
     def set_offset(self, OffsetValue):
         Temp = (OffsetValue * 4)
         self.write_word_data(self.ALGO__PART_TO_PART_RANGE_OFFSET_MM, Temp)
@@ -424,7 +425,7 @@ class VL53L1X:
         Temp = self.read_word_data(self.ALGO__PART_TO_PART_RANGE_OFFSET_MM)
         Temp = Temp << 3
         Temp = Temp >> 5
-        offset = (int16_t)(Temp)
+        offset = Temp
         return offset
 
     def set_x_talk(self, XtalkValue):
@@ -541,8 +542,8 @@ class VL53L1X:
         self.write_byte_data(self.VL53L1_VHV_CONFIG__TIMEOUT_MACROP_LOOP_BOUND, 0x09)
         self.write_byte_data(0x0B, 0)
     '''
-    def calibrate_offset(utargetDistInMm):
-            offset = get_offset()
+    def calibrate_offset(self, targetDistInMm):
+            offset = self.get_offset()
             i = 0
             tmp = 0
             AverageDistance = 0
@@ -557,15 +558,15 @@ class VL53L1X:
                     tmp = self.check_for_data_ready()
                     time.sleep(0.5)
                 distance = self.get_distance()
-                clear_interrupt()
+                self.clear_interrupt()
                 AverageDistance = AverageDistance + distance
             self.stop_ranging()
             AverageDistance = AverageDistance / 50
             offset = targetDistInMm - AverageDistance
             self.write_word_data(self.ALGO__PART_TO_PART_RANGE_OFFSET_MM, offset*4)
 
-    def calibrate_x_talk(utargetDistInMm):
-        uxTalk = get_x_talk()
+    def calibrate_x_talk(self, targetDistInMm):
+        uxTalk = self.get_x_talk()
         i = 0
         tmp = 0
         AverageSignalRate = 0
@@ -579,9 +580,9 @@ class VL53L1X:
         self.start_ranging()
         for i in range(0, 50):
             while (tmp == 0):
-                tmp = check_for_data_ready()
+                tmp = self.check_for_data_ready()
                 time.sleep(0.5)
-            sr = get_signa_rate()
+            sr = self.get_signa_rate()
             distance = self.get_distance()
             self.clear_interrupt()
             AverageDistance = AverageDistance + distance

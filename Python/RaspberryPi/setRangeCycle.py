@@ -27,14 +27,15 @@ sensor.set_distance_mode_short()
 The timing budget (TB) is the time the sensor needed to complete one distance measurement.
 TimingBudgetInMs = 20,33,50,100,200,500 ms
 '''
-sensor.set_timing_budget_in_ms(20)
+sensor.set_timing_budget_in_ms(200)
 '''
 The intermeasurement period  must be greater than or equal to the timing budget
 '''
-sensor.set_inter_measurement_in_ms(50)
+sensor.set_inter_measurement_in_ms(200)
 print("InterMeasurement(ms): %.f" % sensor.get_inter_measurement_in_ms())
 print("TimingBudget(ms)    : %.f" % sensor.get_timing_budget_in_ms())
 print(" ")
+sensor.start_ranging()
 
 def main():
     while True:

@@ -28,7 +28,7 @@ print("ActDistance(mm): %.2f " % act_distance)
 print(" ");
 print("Offset(mm): %.2f " %sensor.get_offset())
 print(" ");
-print("XTalk(cps): %.2f " %sensor.get_XTalk())
+print("XTalk(cps): %.2f " %sensor.get_x_talk())
 print(" ");
 
 def main():
