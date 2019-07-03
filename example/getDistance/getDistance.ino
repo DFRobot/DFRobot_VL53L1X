@@ -2,7 +2,6 @@
    file getDistance.ino
    SEN0302 Distance Ranging Sensor
    The module is connected with Arduino Uno to read the distance
-   This demo can be used to calibrate the sensor(both of offset and cross talk)
    This demo output the distance between sensor and target
    Copyright    [DFRobot](http://www.dfrobot.com), 2016
    Copyright    GNU Lesser General Public License
