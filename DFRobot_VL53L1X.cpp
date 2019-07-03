@@ -11,7 +11,7 @@ const uint8_t VL51L1X_DEFAULT_CONFIGURATION[] = {
 0x08, /* 0x34 : not user-modifiable */
 0x00, /* 0x35 : not user-modifiable */
 0x08, /* 0x36 : not user-modifiable */
-0x10, /* 0x37 : not user-modifiable */
+0x10, /* 0x37 : not user-modifiable */ 
 0x01, /* 0x38 : not user-modifiable */
 0x01, /* 0x39 : not user-modifiable */
 0x00, /* 0x3a : not user-modifiable */
@@ -96,21 +96,12 @@ const uint8_t VL51L1X_DEFAULT_CONFIGURATION[] = {
 
 bool DFRobot_VL53L1X::begin()
 {
+    _pWire->begin();
     lastOperateStatus = eVL53L1X_InitError;
     uint8_t Addr = 0x00, tmp = 0;
-
     for (Addr = 0x2D; Addr <= 0x87; Addr++){
         writeByteData(Addr, VL51L1X_DEFAULT_CONFIGURATION[Addr - 0x2D]);
     }
-    startRanging();
-    while(tmp==0){
-        tmp = checkForDataReady();
-        //Serial.println(tmp);
-        delay(500);
-    }
-    tmp  = 0;
-    clearInterrupt();
-    stopRanging();
     writeByteData(VL53L1_VHV_CONFIG__TIMEOUT_MACROP_LOOP_BOUND, 0x09); /* two bounds VHV */
     writeByteData(0x0B, 0);
     lastOperateStatus = eVL53L1X_ok;
@@ -384,10 +375,24 @@ uint16_t DFRobot_VL53L1X::getInterMeasurementInMs()
 
 uint16_t DFRobot_VL53L1X::getDistance()
 {
-    uint16_t tmp;
+    uint16_t tmp = 65535;
 
     readWordData(VL53L1_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0, &tmp);
+	Serial.print("tmp = ");
+	Serial.println(tmp);
     clearInterrupt();
+	if(tmp == 0){
+		Serial.println("+++++++++");
+       uint8_t buf = 0;
+	   readByteData(0x36,&buf);
+	   if(buf != 0x08){
+		   begin();
+	   }
+	   tmp = 65535;
+	}
+	if(tmp > 4000){
+		tmp = 65535;
+	}
     return tmp;
 }
 /*
@@ -799,7 +804,6 @@ void DFRobot_VL53L1X::readByteData(uint16_t index, uint8_t *data)
 void DFRobot_VL53L1X::readWordData(uint16_t index, uint16_t *data)
 {
     uint8_t buffer[2] = {0,0};
-    
     i2CRead(index, buffer, 2);
 
     *data = (buffer[0] << 8) + buffer[1];
@@ -816,7 +820,6 @@ void DFRobot_VL53L1X::readWordData32(uint16_t index, uint32_t *data)
 void DFRobot_VL53L1X::i2CWrite(uint16_t reg, uint8_t *pBuf, uint16_t len)
 {
     lastOperateStatus = eVL53L1X_WriteRegError;
-    _pWire->begin();
     _pWire->beginTransmission(addr);
     uint8_t buffer[2];
     buffer[0]=(uint8_t) reg>>8;
@@ -830,19 +833,21 @@ void DFRobot_VL53L1X::i2CWrite(uint16_t reg, uint8_t *pBuf, uint16_t len)
 
 void DFRobot_VL53L1X::i2CRead(uint16_t reg, uint8_t *pBuf, uint16_t len)
 {
-    lastOperateStatus = eVL53L1X_ReadRegError;
-    _pWire->begin();
+	lastOperateStatus = eVL53L1X_ReadRegError;
     _pWire->beginTransmission(addr);
     uint8_t buffer[2];
     buffer[0]=(uint8_t) reg >> 8;
     buffer[1]=(uint8_t) reg & 0xFF;
     _pWire->write(buffer, 2);
     if(_pWire->endTransmission() != 0)
-        return;
+	{
+		return;
+	}
     _pWire->requestFrom(addr, (uint8_t) len);
-    for(uint16_t i = 0; i < len; i ++) {
-        pBuf[i] = _pWire->read();
-    }
+	uint16_t i = 0;
+	while(_pWire->available() > 0){
+		pBuf[i++] = _pWire->read();
+	}
     _pWire->endTransmission();
     lastOperateStatus = eVL53L1X_ok;
 }

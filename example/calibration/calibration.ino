@@ -43,7 +43,7 @@ void setup(void)
 void loop(void)
 {
   sensor.startRanging();
-  int distance = sensor.getDistance();
+  uint16_t distance = sensor.getDistance();
   sensor.stopRanging();
 
   Serial.print("Distance(mm): ");
