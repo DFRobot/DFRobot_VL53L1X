@@ -1,5 +1,5 @@
 /*!
-   file getDistance.ino
+   file calibration.ino
    SEN0302 Distance Ranging Sensor
    The module is connected with Arduino Uno to read the distance
    This demo can be used to calibrate the sensor(both of offset and cross talk)
@@ -19,13 +19,25 @@ uint16_t actDistance;
 void setup(void)
 {
   Wire.begin();
-
-  Serial.begin(9600);
-
+  Serial.begin(115200);
   while (sensor.begin() != true){
     Serial.println("Sensor init failed!");
     delay(1000);
   }
+  actDistance = 200;   //actual distace 200
+  Serial.print("AtDistance(mm): ");
+  Serial.println(actDistance);
+  
+  sensor.setOffset(20);                 //This function apply the offset which found during calibration to the sensor
+  sensor.calibrateOffset(actDistance);  //This function set a certain distance to finds the offset and applies the offset
+  Serial.print("Offset(mm): ");
+  Serial.println(sensor.getOffset());
+  
+  //sensor.setXTalk(0);              //This function apply the cross talk which found during calibration to the sensor
+  sensor.calibrateXTalk(actDistance);       //This function set a certain distance to finds the cross talk and applies the cross talk
+  Serial.print("XTalk(cps): ");
+  Serial.println(sensor.getXTalk());
+  Serial.println();
 }
 
 void loop(void)
