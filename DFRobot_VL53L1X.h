@@ -49,11 +49,8 @@
 #define VL53L1_ROI_CONFIG__MODE_ROI_CENTRE_SPAD               0x013E
 
 
-#define VL53L1X_DEFAULT_DEVICE_ADDRESS                        0x52
+#define VL53L1X_DEFAULT_DEVICE_ADDRESS                        0x29
 
-#define ALGO__PART_TO_PART_RANGE_OFFSET_MM    0x001E
-#define MM_CONFIG__INNER_OFFSET_MM            0x0020
-#define MM_CONFIG__OUTER_OFFSET_MM             0x0022
 
 enum eVL53L1X_Status{
     eVL53L1X_ok,
@@ -83,9 +80,6 @@ class DFRobot_VL53L1X
     public:
         DFRobot_VL53L1X(TwoWire *pWire){_pWire = pWire;};
         bool begin();
-        //VL53L1X_Version_t getSoftwareVersion();
-        //void setI2CAddress(uint8_t addr);
-        //int getI2CAddress();
         void setInterruptPolarityHigh();
         void setInterruptPolarityLow();
         void setInterruptPolarity(uint8_t NewPolarity);
@@ -101,8 +95,6 @@ class DFRobot_VL53L1X
         void setInterMeasurementInMs(uint16_t interMeasurement);
         uint16_t getInterMeasurementInMs();
         uint16_t getDistance(); 
-        //uint8_t getRangeStatus(); 
-        //uint16_t checkInterrupt();
         void setOffset(int16_t OffsetValue);
         int16_t getOffset();
         void setXTalk(uint16_t XtalkValue);
@@ -111,13 +103,9 @@ class DFRobot_VL53L1X
         eWindows getDistanceThresholdWindow();
         uint16_t getDistanceThresholdLow();
         uint16_t getDistanceThresholdHigh(); 
-        //void setROI(uint16_t X, uint16_t Y);
-        //void setSignalThreshold(uint16_t Signal);
-        //uint16_t getSignalThreshold(); 
         int8_t calibrateOffset(uint16_t targetDistInMm);
         int8_t calibrateXTalk(uint16_t targetDistInMm);
         void clearInterrupt();
-        //uint8_t gesture();
         eVL53L1X_Status lastOperateStatus;
     private:
         TwoWire *_pWire;

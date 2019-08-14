@@ -11,7 +11,7 @@ const uint8_t VL51L1X_DEFAULT_CONFIGURATION[] = {
 0x08, /* 0x34 : not user-modifiable */
 0x00, /* 0x35 : not user-modifiable */
 0x08, /* 0x36 : not user-modifiable */
-0x10, /* 0x37 : not user-modifiable */ 
+0x10, /* 0x37 : not user-modifiable */
 0x01, /* 0x38 : not user-modifiable */
 0x01, /* 0x39 : not user-modifiable */
 0x00, /* 0x3a : not user-modifiable */
@@ -99,26 +99,25 @@ bool DFRobot_VL53L1X::begin()
     _pWire->begin();
     lastOperateStatus = eVL53L1X_InitError;
     uint8_t Addr = 0x00, tmp = 0;
+
     for (Addr = 0x2D; Addr <= 0x87; Addr++){
         writeByteData(Addr, VL51L1X_DEFAULT_CONFIGURATION[Addr - 0x2D]);
     }
+    startRanging();
+    while(tmp==0){
+        tmp = checkForDataReady();
+        //Serial.println(tmp);
+        delay(500);
+    }
+    tmp  = 0;
+    clearInterrupt();
+    stopRanging();
     writeByteData(VL53L1_VHV_CONFIG__TIMEOUT_MACROP_LOOP_BOUND, 0x09); /* two bounds VHV */
     writeByteData(0x0B, 0);
     lastOperateStatus = eVL53L1X_ok;
     return true;
 }
-/*
-void DFRobot_VL53L1X::setI2CAddress(uint8_t address)
-{
-    writeByteData(VL53L1_I2C_SLAVE__DEVICE_ADDRESS, address >> 1);
-    _addr = address;
-}
 
-int DFRobot_VL53L1X::getI2CAddress()
-{
-    return _addr;
-}
-*/
 void DFRobot_VL53L1X::clearInterrupt()
 {
     writeByteData(SYSTEM__INTERRUPT_CLEAR, 0x01);
@@ -375,49 +374,18 @@ uint16_t DFRobot_VL53L1X::getInterMeasurementInMs()
 
 uint16_t DFRobot_VL53L1X::getDistance()
 {
-    uint16_t tmp = 65535;
+    uint16_t tmp;
 
     readWordData(VL53L1_RESULT__FINAL_CROSSTALK_CORRECTED_RANGE_MM_SD0, &tmp);
-	Serial.print("tmp = ");
-	Serial.println(tmp);
     clearInterrupt();
-	if(tmp == 0){
-		Serial.println("+++++++++");
-       uint8_t buf = 0;
-	   readByteData(0x36,&buf);
-	   if(buf != 0x08){
-		   begin();
-	   }
-	   tmp = 65535;
-	}
-	if(tmp > 4000){
-		tmp = 65535;
-	}
+    if(tmp > 4000){
+        tmp = 65535;
+    }
+    if(tmp < 0)
+        tmp = 0;
     return tmp;
 }
-/*
-uint16_t DFRobot_VL53L1X::getSignalPerSpad()
-{
-    uint16_t SpNb=1, signal;
-    uint16_t signalRate;
 
-    readWordData(VL53L1_RESULT__PEAK_SIGNAL_COUNT_RATE_CROSSTALK_CORRECTED_MCPS_SD0, &signal);
-    readWordData(VL53L1_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0, &SpNb);
-    signalRate = (uint16_t) (2000.0 * signal / SpNb);
-    return signalRate;
-}
-
-uint16_t DFRobot_VL53L1X::getAmbientPerSpad()
-{
-    uint16_t AmbientRate, SpNb=1;
-    uint16_t ambPerSp;
-
-    readWordData(RESULT__AMBIENT_COUNT_RATE_MCPS_SD, &AmbientRate);
-    readWordData(VL53L1_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0, &SpNb);
-    ambPerSp=(uint16_t) (2000.0 * AmbientRate / SpNb);
-    return ambPerSp;
-}
-*/
 uint16_t DFRobot_VL53L1X::getSignalRate()
 {
     uint16_t tmp;
@@ -427,85 +395,9 @@ uint16_t DFRobot_VL53L1X::getSignalRate()
     return tmp;
 }
 
-/*
-uint16_t DFRobot_VL53L1X::getSpadNb()
-{
-    uint16_t tmp;
-
-    readWordData(VL53L1_RESULT__DSS_ACTUAL_EFFECTIVE_SPADS_SD0, &tmp);
-    tmp = tmp >> 8;
-    return tmp;
-}
-
-uint16_t DFRobot_VL53L1X::getAmbientRate()
-{
-    uint16_t ambRate;
-    uint16_t tmp;
-
-    readWordData(RESULT__AMBIENT_COUNT_RATE_MCPS_SD, &tmp);
-    ambRate = tmp*8;
-    return ambRate;
-}
-
-uint8_t DFRobot_VL53L1X::getRangeStatus()
-{
-    uint8_t rangeStatus;
-    uint8_t RgSt;
-
-    readByteData(VL53L1_RESULT__RANGE_STATUS, &RgSt);
-    RgSt = RgSt&0x1F;
-    switch (RgSt) {
-    case 9:
-        RgSt = 0;
-        break;
-    case 6:
-        RgSt = 1;
-        break;
-    case 4:
-        RgSt = 2;
-        break;
-    case 8:
-        RgSt = 3;
-        break;
-    case 5:
-        RgSt = 4;
-        break;
-    case 3:
-        RgSt = 5;
-        break;
-    case 19:
-        RgSt = 6;
-        break;
-    case 7:
-        RgSt = 7;
-        break;
-    case 12:
-        RgSt = 9;
-        break;
-    case 18:
-        RgSt = 10;
-        break;
-    case 22:
-        RgSt = 11;
-        break;
-    case 23:
-        RgSt = 12;
-        break;
-    case 13:
-        RgSt = 13;
-        break;
-    default:
-        RgSt = 255;
-        break;
-    }
-    rangeStatus = RgSt;
-    return rangeStatus;
-}
-*/
 void DFRobot_VL53L1X::setOffset(int16_t OffsetValue)
 {
     int16_t Temp;
-
     Temp = (OffsetValue*4);
     writeWordData(ALGO__PART_TO_PART_RANGE_OFFSET_MM, (uint16_t)Temp);
     writeWordData(MM_CONFIG__INNER_OFFSET_MM, 0x0);
@@ -518,10 +410,12 @@ int16_t DFRobot_VL53L1X::getOffset()
     uint16_t Temp;
 
     readWordData(ALGO__PART_TO_PART_RANGE_OFFSET_MM, &Temp);
-    Temp = Temp << 3;
-    Temp = Temp >> 5;
+    Serial.print("1Temp = ");Serial.println(Temp,HEX);
+    if(Temp & 0x1000){
+        Temp |= 0xE000;
+    }
     offset = (int16_t)(Temp);
-    return offset;
+    return offset/4;
 }
 
 void DFRobot_VL53L1X::setXTalk(uint16_t XtalkValue)
@@ -581,94 +475,7 @@ uint16_t DFRobot_VL53L1X::getDistanceThresholdHigh()
     high = tmp;
     return high;
 }
-/*
-void DFRobot_VL53L1X::setROI(uint16_t X, uint16_t Y)
-{
-    uint8_t OpticalCenter;
 
-    readByteData(VL53L1_ROI_CONFIG__MODE_ROI_CENTRE_SPAD, &OpticalCenter);
-    if (X > 16)
-        X = 16;
-    if (Y > 16)
-        Y = 16;
-    if (X > 10 || Y > 10){
-        OpticalCenter = 199;
-    }
-    writeByteData(ROI_CONFIG__USER_ROI_CENTRE_SPAD, OpticalCenter);
-    writeByteData(ROI_CONFIG__USER_ROI_REQUESTED_GLOBAL_XY_SIZE, (Y - 1) << 4 | (X - 1));
-}
-
-uint16_t DFRobot_VL53L1X::getROIX()
-{
-    uint8_t tmp;
-    uint16_t ROI_X;
-
-    readByteData(ROI_CONFIG__USER_ROI_REQUESTED_GLOBAL_XY_SIZE, &tmp);
-    ROI_X = ((uint16_t)tmp & 0x0F) + 1;
-    return ROI_X;
-}
-
-uint16_t DFRobot_VL53L1X::getROIY()
-{
-    uint8_t tmp;
-    uint16_t ROI_Y;
-
-    readByteData(ROI_CONFIG__USER_ROI_REQUESTED_GLOBAL_XY_SIZE, &tmp);
-    ROI_Y = (((uint16_t)tmp & 0xF0) >> 4) + 1;
-    return ROI_Y;
-}
-
-void DFRobot_VL53L1X::setSignalThreshold(uint16_t Signal)
-{
-    writeWordData(RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS,Signal>>3);
-}
-
-uint16_t DFRobot_VL53L1X::getSignalThreshold()
-{
-    uint16_t signal;
-    uint16_t tmp;
-
-    readWordData(RANGE_CONFIG__MIN_COUNT_RATE_RTN_LIMIT_MCPS, &tmp);
-    signal = tmp <<3;
-    return signal;
-}
-
-void DFRobot_VL53L1X::setSigmaThreshold(uint16_t Sigma)
-{
-    if(Sigma>(0xFFFF>>2)){
-        return 1;
-    }
-    writeWordData(RANGE_CONFIG__SIGMA_THRESH,Sigma<<2);
-}
-
-uint16_t DFRobot_VL53L1X::getSigmaThreshold()
-{
-    uint16_t sigma;
-    uint16_t tmp;
-
-    readWordData(RANGE_CONFIG__SIGMA_THRESH, &tmp);
-    sigma = tmp >> 2;
-    return sigma;
-
-}
-
-void DFRobot_VL53L1X::startTemperatureUpdate()
-{
-    uint8_t tmp=0;
-
-    writeByteData(VL53L1_VHV_CONFIG__TIMEOUT_MACROP_LOOP_BOUND,0x81);
-    writeByteData(0x0B,0x92);
-    startRanging();
-    while(tmp==0){
-        tmp = checkForDataReady();
-        delay(500);
-    }
-    clearInterrupt();
-    stopRanging();
-    writeByteData(VL53L1_VHV_CONFIG__TIMEOUT_MACROP_LOOP_BOUND, 0x09);
-    writeByteData(0x0B, 0);
-}
-*/
 int8_t DFRobot_VL53L1X::calibrateOffset(uint16_t targetDistInMm)
 {
     int16_t offset = getOffset();
@@ -732,33 +539,7 @@ int8_t DFRobot_VL53L1X::calibrateXTalk(uint16_t targetDistInMm)
     writeWordData(0x0016, xTalk);
     return xTalk;
 }
-/*
-uint8_t DFRobot_VL53L1X::gesture(){
-    int distance[1000];
-    uint16_t time;
-    int16_t speed;
-    int i = 0;
-    time = getInterMeasurementInMs();
-    Serial.println(time);
-    Serial.println(i);
-    while (checkForDataReady() == true){
-        distance[i] = getDistance();
-        if(i > 0){
-            speed = (distance[i] - distance[i - 1])/time;
-            if(speed > 0){
-                Serial.print("Target is go away ,speed is ");
-                Serial.print(speed);
-                Serial.println(" m/s");
-            }else{
-                Serial.print("Target is get closed ,speed is ");
-                Serial.print(speed);
-                Serial.println(" m/s");
-            }
-        }
-        i++;
-    }
-}
-*/
+
 void DFRobot_VL53L1X::writeMulti(uint16_t index, uint8_t *pdata, uint32_t count)
 {
     i2CWrite(index, pdata, (uint16_t)count);
@@ -804,8 +585,8 @@ void DFRobot_VL53L1X::readByteData(uint16_t index, uint8_t *data)
 void DFRobot_VL53L1X::readWordData(uint16_t index, uint16_t *data)
 {
     uint8_t buffer[2] = {0,0};
+    
     i2CRead(index, buffer, 2);
-
     *data = (buffer[0] << 8) + buffer[1];
 }
 
@@ -833,21 +614,17 @@ void DFRobot_VL53L1X::i2CWrite(uint16_t reg, uint8_t *pBuf, uint16_t len)
 
 void DFRobot_VL53L1X::i2CRead(uint16_t reg, uint8_t *pBuf, uint16_t len)
 {
-	lastOperateStatus = eVL53L1X_ReadRegError;
+    lastOperateStatus = eVL53L1X_ReadRegError;
     _pWire->beginTransmission(addr);
     uint8_t buffer[2];
     buffer[0]=(uint8_t) reg >> 8;
     buffer[1]=(uint8_t) reg & 0xFF;
     _pWire->write(buffer, 2);
     if(_pWire->endTransmission() != 0)
-	{
-		return;
-	}
+        return;
     _pWire->requestFrom(addr, (uint8_t) len);
-	uint16_t i = 0;
-	while(_pWire->available() > 0){
-		pBuf[i++] = _pWire->read();
-	}
-    _pWire->endTransmission();
+    for(uint16_t i = 0; i < len; i ++) {
+        pBuf[i] = _pWire->read();
+    }
     lastOperateStatus = eVL53L1X_ok;
 }

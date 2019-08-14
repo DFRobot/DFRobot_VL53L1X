@@ -14,29 +14,25 @@
 #include "DFRobot_VL53L1X.h" 
 
 DFRobot_VL53L1X sensor(&Wire);
-uint16_t actDistance;
+uint16_t actDistance = 100; //actual distace 100mm
+int16_t offset = 0;
 
 void setup(void)
 {
   Wire.begin();
-  Serial.begin(115200);
+  Serial.begin(9600);
   while (sensor.begin() != true){
     Serial.println("Sensor init failed!");
     delay(1000);
   }
-  actDistance = 200;   //actual distace 200
   Serial.print("AtDistance(mm): ");
   Serial.println(actDistance);
   
-  sensor.setOffset(20);                 //This function apply the offset which found during calibration to the sensor
-  sensor.calibrateOffset(actDistance);  //This function set a certain distance to finds the offset and applies the offset
+  //sensor.setOffset(offset);                 //This function apply the offset which found during calibration to the sensor
+  offset = sensor.getOffset();
   Serial.print("Offset(mm): ");
-  Serial.println(sensor.getOffset());
-  
-  //sensor.setXTalk(0);              //This function apply the cross talk which found during calibration to the sensor
-  sensor.calibrateXTalk(actDistance);       //This function set a certain distance to finds the cross talk and applies the cross talk
-  Serial.print("XTalk(cps): ");
-  Serial.println(sensor.getXTalk());
+  Serial.println(offset);
+  Serial.println("offset = Distance - actDistance");
   Serial.println();
 }
 
@@ -45,9 +41,12 @@ void loop(void)
   sensor.startRanging();
   uint16_t distance = sensor.getDistance();
   sensor.stopRanging();
+  offset = actDistance - distance;
 
   Serial.print("Distance(mm): ");
   Serial.println(distance);
+  Serial.print("offset(mm): ");
+  Serial.println(offset);
 
   Serial.println();
   delay(1000);

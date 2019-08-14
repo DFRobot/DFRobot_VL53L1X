@@ -125,6 +125,7 @@ uint16_t getDistance();
  * @param The user may use this function to apply, to the sensor
  *        The offset found during calibration which is stored in the host system
  *        OffsetValue = targetDistance - sensorDistance
+ *        range: -1024~1023
  *
  */
 void setOffset(int16_t OffsetValue);
@@ -132,7 +133,7 @@ void setOffset(int16_t OffsetValue);
 /*
  * @brief The function returns the current offset correction applied to the sensor
  *
- * @return The detailed offset value
+ * @return The detailed offset value, range: -1024~1023
  */
 int16_t getOffset();
 
