@@ -25,14 +25,14 @@ void setup(void)
     Serial.println("Sensor init failed!");
     delay(1000);
   }
-  Serial.print("AtDistance(mm): ");
+  Serial.print("ActDistance(mm): ");
   Serial.println(actDistance);
   
   //sensor.setOffset(offset);                 //This function apply the offset which found during calibration to the sensor
   offset = sensor.getOffset();
   Serial.print("Offset(mm): ");
   Serial.println(offset);
-  Serial.println("offset = Distance - actDistance");
+  Serial.println("offset = actDistance - Distance");// offset = targetDistance - sensorDistance
   Serial.println();
 }
 

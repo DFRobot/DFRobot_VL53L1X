@@ -423,10 +423,10 @@ class VL53L1X:
         Temp = 0
     
         Temp = self.read_word_data(self.ALGO__PART_TO_PART_RANGE_OFFSET_MM)
-        Temp = Temp << 3
-        Temp = Temp >> 5
+        if(Temp & 0x1000):
+           Temp |= 0xE000 
         offset = Temp
-        return offset
+        return -(65536 - offset/4)
 
     def set_x_talk(self, XtalkValue):
         self.write_word_data(self.ALGO__CROSSTALK_COMPENSATION_X_PLANE_GRADIENT_KCPS, 0x0000)

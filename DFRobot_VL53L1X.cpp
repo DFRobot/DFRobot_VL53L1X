@@ -410,7 +410,6 @@ int16_t DFRobot_VL53L1X::getOffset()
     uint16_t Temp;
 
     readWordData(ALGO__PART_TO_PART_RANGE_OFFSET_MM, &Temp);
-    Serial.print("1Temp = ");Serial.println(Temp,HEX);
     if(Temp & 0x1000){
         Temp |= 0xE000;
     }
