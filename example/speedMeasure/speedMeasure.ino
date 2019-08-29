@@ -16,11 +16,10 @@
 
 DFRobot_VL53L1X sensor(&Wire);
 
-float dis1 = 0;
-float dis2;
-uint16_t time;
-float speed;
-int i = 0;
+float dis1 = 0; //Starting point
+float dis2;     //End position
+uint16_t time;  //Measurement time
+float speed;    //The speed of movement of objects
 
 void setup(void)
 {
@@ -32,15 +31,15 @@ void setup(void)
         Serial.println("Sensor init failed!");
         delay(1000);
     }
-    sensor.setDistanceModeShort();
-    sensor.setTimingBudgetInMs(eBudget_500ms);
-    sensor.setInterMeasurementInMs(500);
+    sensor.setDistanceModeShort();//Set the ranging mode to short mode,0~1.3m
+    sensor.setTimingBudgetInMs(eBudget_500ms);//Set sensor time overhead
+    sensor.setInterMeasurementInMs(500);//Set the measurement interval of the sensor
     Serial.print("InterMeasurement:");
     Serial.println(sensor.getInterMeasurementInMs());
     Serial.print("TimingBudget:");
     Serial.println(sensor.getTimingBudgetInMs());
-    time = sensor.getInterMeasurementInMs();
-    sensor.startRanging();
+    time = sensor.getInterMeasurementInMs();//Get the measurement interval of the sensor
+    sensor.startRanging();//Start to ranging.
     delay(100);
 }
 
@@ -48,8 +47,8 @@ void loop(void)
 {
     while (sensor.checkForDataReady() == true){
         dis2 = dis1;
-        dis1 = sensor.getDistance();
-        speed = (dis1/time) - (dis2/time);
+        dis1 = sensor.getDistance();//Get measurement distance.
+        speed = (dis1/time) - (dis2/time);//Calculate the speed of movement of objects
         if(abs(speed) < 2){
             if(speed > 0){
                 Serial.print("Target is go away ,   speed is ");

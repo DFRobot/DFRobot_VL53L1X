@@ -13,7 +13,7 @@
 #include "Wire.h"
 #include "DFRobot_VL53L1X.h"
 
-volatile  int8_t GPIO1TRIG = 0;
+volatile  int8_t GPIO1TRIG = 0;//Interrupt flag
 
 DFRobot_VL53L1X sensor(&Wire);
 
@@ -24,7 +24,7 @@ void setup(void)
 
   Serial.begin(9600);
 
-  while (sensor.begin() != true){
+  while (sensor.begin() != true){//sensor initialization
     Serial.println("Sensor init failed!");
     delay(1000);
   }
@@ -50,10 +50,10 @@ void setup(void)
 
 void loop() 
 {
-  while(GPIO1TRIG == 0){}
+  while(GPIO1TRIG == 0){}//Polling interrupt flag.
   GPIO1TRIG = 0;
   int distance;
-  distance = sensor.getDistance();
+  distance = sensor.getDistance();//Get measurement distance.
   Serial.print("Distance(mm): ");
   Serial.println(distance);
 }

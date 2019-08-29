@@ -100,14 +100,14 @@ void setDistanceModeShort();
 /*
  * @brief This function programs the intermeasurement period (IMP) in ms
  *
- * @param InterMeasurement must be greater than or equal to the timing budget
+ * @param InterMeasurement must be greater than or equal to the timing budget rang: 0~1693
  */
 void setInterMeasurementInMs(uint16_t interMeasurement);
 
 /*
  * @brief This function returns the intermeasurement period in ms
  *
- * @return The intermeasurement period in ms
+ * @return The intermeasurement period in ms,rang:0~1693
  */
 uint16_t getInterMeasurementInMs();
 

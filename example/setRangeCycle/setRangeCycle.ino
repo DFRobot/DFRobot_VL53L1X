@@ -21,7 +21,7 @@ void setup(void)
 
   Serial.begin(9600);
 
-  while (sensor.begin() != true){
+  while (sensor.begin() != true){//sensor initialization
     Serial.println("Sensor init failed!");
     delay(1000);
   }
@@ -38,21 +38,20 @@ void setup(void)
   /* The intermeasurement period  must be greater than or equal to the timing budget*/
   sensor.setInterMeasurementInMs(20);
   Serial.print("InterMeasurement(ms):");
-  Serial.println(sensor.getInterMeasurementInMs());
+  Serial.println(sensor.getInterMeasurementInMs());// Get measurement interval
   Serial.print("TimingBudget(ms):    ");
-  Serial.println(sensor.getTimingBudgetInMs());
+  Serial.println(sensor.getTimingBudgetInMs());//Get time overhead time
   Serial.println();
   
-  sensor.startRanging();
+  sensor.startRanging();//start to ranging.
 }
 
 void loop(void)
 {
-  while (sensor.checkForDataReady() == true){
+  while (sensor.checkForDataReady() == true){//Polling measurement data is ready.
     int distance;
-    distance = sensor.getDistance();
+    distance = sensor.getDistance();//Get measurement distance.
     Serial.print("Distance(mm): ");
     Serial.println(distance);
-    Serial.println();
   }
 }

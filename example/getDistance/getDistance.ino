@@ -20,7 +20,7 @@ void setup(void)
   Wire.begin();
   Serial.begin(9600);
 
-  while (sensor.begin() != true){
+  while (sensor.begin() != true){//sensor initialization
     Serial.println("Sensor init failed!");
     delay(1000);
   }
@@ -28,13 +28,12 @@ void setup(void)
 
 void loop(void)
 {
-  sensor.startRanging();
-  uint16_t distance = sensor.getDistance();
-  sensor.stopRanging();
+  sensor.startRanging();//start to ranging.
+  uint16_t distance = sensor.getDistance();//Get measurement distance.
+  sensor.stopRanging();//stop to ranging.
 
   Serial.print("Distance(mm): ");
   Serial.println(distance);
 
-  Serial.println();
   delay(1000);
 }

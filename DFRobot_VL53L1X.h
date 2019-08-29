@@ -1,11 +1,6 @@
 #include "Wire.h"
 #include "Arduino.h"
 
-#define VL53L1X_IMPLEMENTATION_VER_MAJOR       1
-#define VL53L1X_IMPLEMENTATION_VER_MINOR       0
-#define VL53L1X_IMPLEMENTATION_VER_SUB         1
-#define VL53L1X_IMPLEMENTATION_VER_REVISION  0000
-
 #define SOFT_RESET                                            0x0000
 #define VL53L1_I2C_SLAVE__DEVICE_ADDRESS                      0x0001
 #define VL53L1_VHV_CONFIG__TIMEOUT_MACROP_LOOP_BOUND          0x0008
@@ -50,90 +45,85 @@
 
 
 #define VL53L1X_DEFAULT_DEVICE_ADDRESS                        0x29
+#define CMDRECVBUFSIZE                                        20
 
 
 enum eVL53L1X_Status{
-    eVL53L1X_ok,
-    eVL53L1X_InitError,
-    eVL53L1X_WriteRegError,
-    eVL53L1X_ReadRegError,
+  eVL53L1X_ok,
+  eVL53L1X_InitError,
+  eVL53L1X_WriteRegError,
+  eVL53L1X_ReadRegError
 };
 
 typedef enum{
-    eVL53L1X_Below = 0,
-    eVL53L1X_Above = 1,
-    eVL53L1X_Out = 2,
-    eVL53L1X_In = 3
+  eVL53L1X_Below = 0,
+  eVL53L1X_Above = 1,
+  eVL53L1X_Out = 2,
+  eVL53L1X_In = 3
 }eWindows;
 
 typedef enum {
-    eBudget_20ms = 20,
-    eBudget_33ms = 33,
-    eBudget_50ms = 50,
-    eBudget_100ms = 100,
-    eBudget_200ms = 200,
-    eBudget_500ms = 500
+  eBudget_20ms = 20,
+  eBudget_33ms = 33,
+  eBudget_50ms = 50,
+  eBudget_100ms = 100,
+  eBudget_200ms = 200,
+  eBudget_500ms = 500
 }eTimingBudget;
 
 class DFRobot_VL53L1X
 {
-    public:
-        DFRobot_VL53L1X(TwoWire *pWire){_pWire = pWire;};
-        bool begin();
-        void setInterruptPolarityHigh();
-        void setInterruptPolarityLow();
-        void setInterruptPolarity(uint8_t NewPolarity);
-        void startRanging();
-        void stopRanging();
-        void setTimingBudgetInMs(eTimingBudget timingBudget);
-        eTimingBudget getTimingBudgetInMs();
-        uint8_t getInterruptPolarity();
-        bool checkForDataReady();
-        void setDistanceModeLong();
-        void setDistanceModeShort();
-        uint8_t getDistanceMode();
-        void setInterMeasurementInMs(uint16_t interMeasurement);
-        uint16_t getInterMeasurementInMs();
-        uint16_t getDistance(); 
-        void setOffset(int16_t OffsetValue);
-        int16_t getOffset();
-        void setXTalk(uint16_t XtalkValue);
-        uint16_t getXTalk(); 
-        void setDistanceThreshold(uint16_t ThreshLow, uint16_t ThreshHigh, eWindows Window);
-        eWindows getDistanceThresholdWindow();
-        uint16_t getDistanceThresholdLow();
-        uint16_t getDistanceThresholdHigh(); 
-        int8_t calibrateOffset(uint16_t targetDistInMm);
-        int8_t calibrateXTalk(uint16_t targetDistInMm);
-        void clearInterrupt();
-        eVL53L1X_Status lastOperateStatus;
-    private:
-        TwoWire *_pWire;
-        void sensorOn();
-        void sensorOff();
-        
-        uint16_t getSignalPerSpad();
-        uint16_t getAmbientPerSpad();
-        uint16_t getSignalRate(); 
-        uint16_t getSpadNb();
-        uint16_t getAmbientRate(); 
-        uint16_t getROIX(); 
-        uint16_t getROIY(); 
-        void setSigmaThreshold(uint16_t Sigma);
-        uint16_t getSigmaThreshold(); 
-        void startTemperatureUpdate();
-        void setDistanceMode(uint16_t DM);
-        void writeByteData(uint16_t index, uint8_t data);
-        void writeWordData(uint16_t index, uint16_t data);
-        void writeWordData32(uint16_t index, uint32_t data);
-        void readByteData(uint16_t index, uint8_t *data);
-        void readWordData(uint16_t index, uint16_t *data);
-        void readWordData32(uint16_t index, uint32_t *data);
-        void updateByte(uint16_t index, uint8_t AndData, uint8_t OrData);
-        void writeMulti(uint16_t index, uint8_t *pdata, uint32_t count);
-        void readMulti(uint16_t index, uint8_t *pdata, uint32_t count);
-        void i2CWrite(uint16_t reg, uint8_t *pBuf, uint16_t len);
-        void i2CRead(uint16_t reg, uint8_t *pBuf, uint16_t len);
-    
-        uint8_t   addr = 0x29;
+public:
+  DFRobot_VL53L1X(TwoWire *pWire);
+  bool begin(); // This function loads the 135 bytes default values to initialize the sensor. 
+  void update(); //Waiting for calibration
+  void setInterruptPolarityHigh();//Set the interrupt polarity to high
+  void setInterruptPolarityLow();//Set the interrupt polarity to low
+  void startRanging();//Start ranging
+  void stopRanging();//Stop ranging
+  void setTimingBudgetInMs(eTimingBudget timingBudget);//Set time overhead
+  eTimingBudget getTimingBudgetInMs();//get time overhead
+  uint8_t getInterruptPolarity();//Get the interrupt polarity
+  bool checkForDataReady();//Check if the data is ready, return true, not return false
+  void setDistanceModeLong();//Set it to long distance mode 0~4m
+  void setDistanceModeShort();//Set it to short distance mode 0~1.3m
+  uint8_t getDistanceMode();//Get the current ranging mode 1:short mode  2:long mode
+  void setInterMeasurementInMs(uint16_t interMeasurement);//Set time interval ranging
+  uint16_t getInterMeasurementInMs();//get time interval ranging
+  uint16_t getDistance(); //Get the distance value
+  void setOffset(int16_t OffsetValue);//This function programs the offset correction in mm. 
+  int16_t getOffset();//This function returns the programmed offset correction value in mm. 
+  void setXTalk(uint16_t XtalkValue);//Set the crosstalk calibration value
+  uint16_t getXTalk(); //get the crosstalk calibration value
+  void setDistanceThreshold(uint16_t ThreshLow, uint16_t ThreshHigh, eWindows Window);//set distance threshold
+  eWindows getDistanceThresholdWindow();//get distance Threshold Window 
+  uint16_t getDistanceThresholdLow();//Get the low threshold of the ranging range
+  uint16_t getDistanceThresholdHigh();//Get the high threshold of the ranging range
+  int8_t calibrateOffset(uint16_t targetDistInMm);//Offset calibration
+  int8_t calibrateXTalk(uint16_t targetDistInMm);//crosstalk calibration 
+  void clearInterrupt();//clear interrupt
+  eVL53L1X_Status lastOperateStatus;
+protected:
+  bool cmdSerialDataAvailable();//Return true if it detects that the serial port has data, otherwise it returns false
+  int cmdPrase();// Parsing serial data commands
+  void calibration(int mode);//enter calibration mode to calibration sensor
+  void setInterruptPolarity(uint8_t NewPolarity);//set Interrupt Polarity
+  void setDistanceMode(uint16_t DM);// Set distance mode,long: 0~4m,short: 0~1.3m
+private:
+  TwoWire *_pWire;
+  uint16_t getSignalRate();//get signal rate
+  void setSigmaThreshold(uint16_t Sigma);//set Sigma Threshold
+  void writeByteData(uint16_t index, uint8_t data);//write data for 1 bytes
+  void writeWordData(uint16_t index, uint16_t data);//write data for 2 bytes
+  void writeWordData32(uint16_t index, uint32_t data);//write data for 4 bytes
+  void readByteData(uint16_t index, uint8_t *data);// read a byte data
+  void readWordData(uint16_t index, uint16_t *data);//Read data for a bytes
+  void readWordData32(uint16_t index, uint32_t *data);//Read data for 4 bytes
+  void i2CWrite(uint16_t reg, uint8_t *pBuf, uint16_t len);//IIC writes len bytes of data
+  void i2CRead(uint16_t reg, uint8_t *pBuf, uint16_t len);//IIC reads len bytes of data
+
+  uint8_t   addr = 0x29;
+  char cmdRecvBuf[CMDRECVBUFSIZE+1];
+  int cmdRecvBufIndex;
+  double decimal;
 };
